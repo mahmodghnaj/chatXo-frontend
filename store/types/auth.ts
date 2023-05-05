@@ -1,0 +1,14 @@
+export interface SignInUser {
+  email: string;
+  password: string;
+}
+export interface InfoSignIn {
+  accessToken: string;
+  refreshToken: string;
+}
+export interface SignUp {
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
+}
