@@ -1,7 +1,21 @@
 import Axios, { AxiosResponse } from "axios";
-
+import Cookies from "js-cookie";
 const API_BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 const axios = Axios.create({ baseURL: API_BASE_URL, withCredentials: true });
+
+axios.interceptors.request.use(
+  (config) => {
+    const token = Cookies.get("accessToken");
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
+
 axios.interceptors.response.use(
   (response: AxiosResponse) => {
     return response;
