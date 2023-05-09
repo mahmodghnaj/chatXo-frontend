@@ -7,7 +7,7 @@ const AuthLayout = ({ children }: componentProps) => {
   return (
     <>
       <div className="h-screen grid from-primary to-secondary bg-gradient-to-br">
-        <div className="col-start-1 z-20 flex justify-end p-4 row-start-1 self-start">
+        <div className="col-start-1 z-2 flex justify-end p-4 row-start-1 self-start">
           <ThemeChange />
         </div>
         <div className=" col-start-1 row-start-1 z-10 flex justify-center  items-center">

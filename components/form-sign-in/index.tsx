@@ -7,6 +7,7 @@ import { object, string, TypeOf } from "zod";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useSignInMutation } from "@/store/service/auth";
+import { useEffect } from "react";
 const signInSchema = object({
   email: string()
     .min(1, "Email address is required")
@@ -31,6 +32,9 @@ const FormSignIn = () => {
   const onSubmitHandler: SubmitHandler<SignInInput> = (values) => {
     signIn(values);
   };
+  useEffect(() => {
+    if (isSuccess) router.push("/");
+  }, [isSuccess]);
   return (
     <>
       <div className="bg-base-200 w-auto sm:w-96 rounded-3xl p-8">
@@ -76,7 +80,10 @@ const FormSignIn = () => {
               </p>
             </div>
           </div>
-          <button type="submit" className="mt-6 btn btn-primary w-full ">
+          <button
+            type="submit"
+            className={`mt-6 btn btn-primary w-full ${isLoading && "loading"}`}
+          >
             Sign In
           </button>
         </form>
@@ -89,7 +96,7 @@ const FormSignIn = () => {
           <button className="btn  btn-square btn-sm">
             <BsFacebook className="text-blue-400" size="20px" />
           </button>
-          <button className="btn   btn-square btn-sm">
+          <button className="btn btn-square btn-sm">
             <AiOutlineGithub size="20px" />
           </button>
         </div>

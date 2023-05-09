@@ -8,16 +8,15 @@ import {
 import { MiddlewareFactory } from "./types";
 
 const routesWithoutAuth = (pathname: string) => {
-  return !["/_next/", "/sign-up", "/sign-in"].some((path) =>
-    pathname.startsWith(path)
-  );
+  return ["/sign-up", "/sign-in"].some((path) => pathname.startsWith(path));
 };
 
 export const withAuthorization: MiddlewareFactory = (next: NextMiddleware) => {
   return async (request: NextRequest, _next: NextFetchEvent) => {
     const pathname = request.nextUrl.pathname;
-    if (routesWithoutAuth(pathname)) {
-      const verifiedToken = await verifyAuth(request);
+    if (pathname.startsWith("/_next/")) return;
+    const verifiedToken = await verifyAuth(request);
+    if (!routesWithoutAuth(pathname)) {
       if (verifiedToken) {
         if (verifiedToken.accessToken && verifiedToken.refreshToken) {
           const response = NextResponse.next();
@@ -33,6 +32,10 @@ export const withAuthorization: MiddlewareFactory = (next: NextMiddleware) => {
               expires: new Date(new Date().setDate(new Date().getDate() + 60)),
               httpOnly: true,
             });
+          // if (pathname == "sign-up" || pathname == "sign-in") {
+          //   const url = new URL(`/`, request.url);
+          //   return NextResponse.redirect(url);
+          // }
           return response;
         }
       } else {

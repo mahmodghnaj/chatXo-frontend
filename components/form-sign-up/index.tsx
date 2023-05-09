@@ -2,6 +2,8 @@ import { useRouter } from "next/router";
 import { object, string, TypeOf } from "zod";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useSignUpMutation } from "@/store/service/auth";
+import { useEffect } from "react";
 const signUpSchema = object({
   firstName: string().min(1, "Required"),
   lastName: string().min(1, "Required"),
@@ -17,6 +19,8 @@ const signUpSchema = object({
 });
 export type signUpInput = TypeOf<typeof signUpSchema>;
 const FormSignUp = () => {
+  const [signUp, { isLoading, isSuccess }] = useSignUpMutation();
+  const router = useRouter();
   const {
     register,
     handleSubmit,
@@ -25,9 +29,12 @@ const FormSignUp = () => {
     resolver: zodResolver(signUpSchema),
   });
   const onSubmitHandler: SubmitHandler<signUpInput> = (values) => {
-    console.log(values);
+    const { confirmPassword, ...res } = values;
+    signUp(res);
   };
-  const router = useRouter();
+  useEffect(() => {
+    if (isSuccess) router.push("/");
+  }, [isSuccess, router]);
   return (
     <>
       <div className="bg-base-200 z-50 w-auto sm:w-96 rounded-3xl p-8">
@@ -117,7 +124,10 @@ const FormSignUp = () => {
               </p>
             </div>
           </div>
-          <button type="submit" className="mt-5 btn btn-primary w-full ">
+          <button
+            type="submit"
+            className={`mt-5 btn btn-primary w-full ${isLoading && "loading"}`}
+          >
             Sign Up
           </button>
         </form>

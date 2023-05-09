@@ -2,6 +2,12 @@ export interface SignInUser {
   email: string;
   password: string;
 }
+export interface SignUpUser {
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
+}
 export interface InfoSignIn {
   accessToken: string;
   refreshToken: string;
