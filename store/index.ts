@@ -1,11 +1,13 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { authSlice } from "./features/auth";
+import { chatsSlice } from "./features/chats";
 import { GeneralNotifications } from "./middleware/general-notifications";
 import { baseApi } from "./service";
 export const store = configureStore({
   reducer: {
     [baseApi.reducerPath]: baseApi.reducer,
     [authSlice.name]: authSlice.reducer,
+    [chatsSlice.name]: chatsSlice.reducer,
   },
   devTools: process.env.NODE_ENV === "development",
   middleware: (getDefaultMiddleware) =>

@@ -1,1 +1,1 @@
-module.exports = {":root,\n[data-theme]":{"backgroundColor":"hsla(var(--b1) / var(--tw-bg-opacity, 1))","color":"hsla(var(--bc) / var(--tw-text-opacity, 1))"},"html":{"WebkitTapHighlightColor":"transparent"}};
+module.exports = {":root,\n[data-theme]":{"backgroundColor":"hsla(var(--b1) / var(--tw-bg-opacity, 1))","color":"hsla(var(--bc) / var(--tw-text-opacity, 1))"},"html":{"WebkitTapHighlightColor":"transparent","height":"100%"},"body,\nbody > div:first-child,\ndiv#__next,\ndiv#__next > div":{"height":"100%"}};

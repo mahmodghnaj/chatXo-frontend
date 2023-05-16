@@ -1,6 +1,6 @@
 import { ReactElement, ReactNode, useEffect } from "react";
 import type { NextPage } from "next";
-import type { AppContext, AppInitialProps, AppProps } from "next/app";
+import type { AppContext, AppProps } from "next/app";
 import "@/styles/globals.css";
 import useLocalStorage from "@/utilities/common/hooks/use-local-storage";
 import { ToastContainer } from "react-toastify";
@@ -9,6 +9,8 @@ import { Provider } from "react-redux";
 import { store } from "@/store";
 import Cookies from "cookies";
 import { setRefreshToken } from "@/store/features/auth";
+import { ProvideSocketIoClient } from "@/utilities/common/hooks/use-socket-io";
+
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement) => ReactNode;
 };
@@ -21,17 +23,22 @@ const App = ({ Component, pageProps, ...res }: AppPropsWithLayout) => {
   const [myTheme] = useLocalStorage<string>("theme", "light");
   useEffect(() => {
     document.body.setAttribute("data-theme", myTheme);
-  }, [myTheme]);
+  }, []);
   //
   if (res.refreshToken) {
     store.dispatch(setRefreshToken(res.refreshToken));
   }
   const getLayout = Component.getLayout ?? ((page) => page);
-  return getLayout(
+  const withLayout = getLayout(
+    <>
+      <Component {...pageProps} />
+      <ToastContainer />
+    </>
+  );
+  return (
     <>
       <Provider store={store}>
-        <Component {...pageProps} />
-        <ToastContainer />
+        <ProvideSocketIoClient> {withLayout} </ProvideSocketIoClient>
       </Provider>
     </>
   );

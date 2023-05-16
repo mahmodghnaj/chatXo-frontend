@@ -2,7 +2,7 @@ import Main from "@/components/layouts/main";
 import { ReactElement } from "react";
 import { NextPageWithLayout } from "./_app";
 
-const Home: NextPageWithLayout = () => {
+const Friends: NextPageWithLayout = () => {
   return (
     <>
       <div>Hello</div>
@@ -10,7 +10,7 @@ const Home: NextPageWithLayout = () => {
   );
 };
 
-Home.getLayout = function getLayout(page: ReactElement) {
+Friends.getLayout = function getLayout(page: ReactElement) {
   return <Main>{page}</Main>;
 };
-export default Home;
+export default Friends;

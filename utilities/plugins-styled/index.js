@@ -8,8 +8,8 @@ const styled = require('../plugins-styled/styled')
 const mainFunction = ({ addBase, addComponents, addUtilities, config, postcss }) => {
     colorFunctions.injectThemes(addBase, config, themes)
     addBase(base)
-    addComponents(global)
-    addComponents(styled)
+    addComponents(global, { variants: ["responsive"] })
+    addComponents(styled, { variants: ["responsive"] })
 };
 module.exports = require("tailwindcss/plugin")(mainFunction, {
     theme: {
