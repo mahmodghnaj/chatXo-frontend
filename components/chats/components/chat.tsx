@@ -1,14 +1,24 @@
+import { currentChat, setCurrentChat } from "@/store/features/chats";
 import { ChatType } from "@/store/types/chats";
 import { getChatDate } from "@/utilities/common/date";
+import { useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 
 type ChatProps = {
   chat: ChatType;
 };
 
 const Chat = ({ chat }: ChatProps) => {
+  const dispatch = useDispatch();
+  const current = useSelector(currentChat);
   return (
     <>
-      <div className="transition duration-200 ease-in-out pl-4 pt-4 hover:bg-base-content hover:bg-opacity-10 cursor-pointer">
+      <div
+        onClick={() => dispatch(setCurrentChat(chat))}
+        className={`transition duration-200 ease-in-out pl-4 pt-4 hover:bg-base-content hover:bg-opacity-10 cursor-pointer ${
+          current?.id == chat.id && "bg-base-content bg-opacity-20"
+        }`}
+      >
         <div className="pr-4 flex items-center">
           <svg
             viewBox="0 0 212 212"
@@ -45,7 +55,9 @@ const Chat = ({ chat }: ChatProps) => {
             </div>
           </div>
         </div>
-        <div className="ml-8 pt-4 divider"></div>
+        <div
+          className={`ml-8 pt-4 ${current?.id != chat.id && "divider"}`}
+        ></div>
       </div>
     </>
   );

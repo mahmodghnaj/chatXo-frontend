@@ -21,6 +21,7 @@
     "@types/react-dom": "18.0.11",
     "autoprefixer": "10.4.14",
     "axios": "^1.4.0",
+    "classnames": "^2.3.2",
     "color": "^4.2.3",
     "cookies": "^0.8.0",
     "eslint": "8.38.0",

@@ -1,3 +1,4 @@
+import CurrentChat from "@/components/current-chat";
 import Main from "@/components/layouts/main";
 import { ReactElement } from "react";
 import { NextPageWithLayout } from "./_app";
@@ -5,7 +6,7 @@ import { NextPageWithLayout } from "./_app";
 const Home: NextPageWithLayout = () => {
   return (
     <>
-      <div>Hello</div>
+      <CurrentChat />
     </>
   );
 };

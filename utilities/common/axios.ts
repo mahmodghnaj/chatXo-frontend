@@ -9,6 +9,7 @@ axios.interceptors.request.use(
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
+
     return config;
   },
   (error) => {
@@ -17,7 +18,8 @@ axios.interceptors.request.use(
 );
 
 axios.interceptors.response.use(
-  (response: AxiosResponse) => {
+  async (response: AxiosResponse) => {
+    await sleep(3000);
     return response;
   },
   async (error: any) => {
@@ -43,5 +45,9 @@ const refreshAccessToken = async (): Promise<any> => {
     withCredentials: true,
   });
 };
+
+function sleep(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
 
 export default axios;
