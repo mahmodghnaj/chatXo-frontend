@@ -120,3 +120,9 @@ export const themes: TypeThemes[] = [
     id: "winter",
   },
 ];
+
+export const defaultPagination = {
+  total: true,
+  page: 1,
+  skip: 50,
+};

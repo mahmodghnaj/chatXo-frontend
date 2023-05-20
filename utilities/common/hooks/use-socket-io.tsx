@@ -1,11 +1,5 @@
 import Cookies from "js-cookie";
-import React, {
-  useContext,
-  createContext,
-  useRef,
-  useEffect,
-  useMemo,
-} from "react";
+import React, { useContext, createContext, useRef } from "react";
 import SocketIoClient from "../socketIo-client";
 
 interface SocketIoContextValue {
@@ -40,24 +34,19 @@ export function useSocketIoClient() {
 }
 
 function useProvideSocketIoClient() {
-  const config = useMemo(
-    () => ({
-      url: process.env.NEXT_PUBLIC_BASE_URL?.toString().replace("api/", ""),
-      token: Cookies.get("accessToken"),
-    }),
-    []
-  );
+  const config = {
+    url: process.env.NEXT_PUBLIC_BASE_URL?.toString().replace("api/", ""),
+    token: Cookies.get("accessToken"),
+  };
   const clientRef = useRef<SocketIoClient | null>(null);
-  useEffect(() => {
-    if (!clientRef.current) {
-      clientRef.current = new SocketIoClient(config);
-      clientRef.current.on("connect", () => {
-        console.log("Socket.io client connected");
-      });
-      clientRef.current.on("disconnect", () => {
-        console.log("Socket.io client disconnected");
-      });
-    }
-  }, [config]);
+  if (!clientRef.current) {
+    clientRef.current = new SocketIoClient(config);
+    clientRef.current.on("connect", () => {
+      console.log("Socket.io client connected");
+    });
+    clientRef.current.on("disconnect", () => {
+      console.log("Socket.io client disconnected");
+    });
+  }
   return clientRef.current;
 }

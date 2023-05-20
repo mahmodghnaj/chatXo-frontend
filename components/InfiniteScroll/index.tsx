@@ -1,68 +1,106 @@
-import { QueryDefinition } from "@reduxjs/toolkit/dist/query";
-import { UseQuery } from "@reduxjs/toolkit/dist/query/react/buildHooks";
+import { defaultPagination } from "@/lib/data";
 import classNames from "classnames";
-import React, { useEffect, useRef, useState } from "react";
+import React, { forwardRef, useEffect, useRef, useState } from "react";
+import { mergeRefs } from "react-merge-refs";
 import LoadingSpinner from "../loading-spinner";
-interface InfiniteScrollProps {
-  children: (data: any) => JSX.Element;
-  query: UseQuery<QueryDefinition<any, any, any, any>>;
-  className: string;
-  data: any[];
-  total: number | undefined;
-}
+import { InfiniteScrollProps } from "./type";
 
-function InfiniteScroll({
-  children,
-  query,
-  className,
-  data,
-  total,
-}: InfiniteScrollProps) {
-  const [page, setPage] = useState(1);
-  const parentRef = useRef<HTMLDivElement>(null);
-  const { isFetching, isLoading } = query(page, {
-    skip: !!(total && data.length >= total),
-  });
-  useEffect(() => {
-    const parentElem = parentRef.current;
-    const handleScroll = () => {
-      if (!parentElem) return;
-      if (!total) {
-        throw new Error("Total Not Found");
+const InfiniteScroll = forwardRef<HTMLDivElement, InfiniteScrollProps>(
+  (
+    {
+      fetch,
+      children,
+      query,
+      className,
+      queryParams,
+      data,
+      total,
+      focusLastItem,
+      scrollBack,
+    },
+    ref
+  ) => {
+    const [page, setPage] = useState(defaultPagination.page);
+    const parentRef = useRef<HTMLDivElement>(null);
+    const listRef = useRef<HTMLDivElement>(null);
+    const { isFetching, isLoading } = fetch(
+      {
+        id: queryParams,
+        params: {
+          ...defaultPagination,
+          page: page,
+          ...query,
+        },
+      },
+      {
+        skip: !!(total && data.length >= total),
       }
-      if (data.length >= total) {
-        parentElem.removeEventListener("scroll", handleScroll);
-        return;
+    );
+    useEffect(() => {
+      const parentElem = parentRef.current;
+      const handleScroll = () => {
+        if (!parentElem) return;
+        if (!total) {
+          return;
+        }
+        if (data.length >= total) {
+          parentElem.removeEventListener("scroll", handleScroll);
+          return;
+        }
+        const scrollHeight = parentElem.scrollHeight;
+        const scrollTop = parentElem.scrollTop;
+        const clientHeight = parentElem.clientHeight;
+        if (
+          (scrollBack && scrollTop === 0) ||
+          (!scrollBack &&
+            scrollTop + clientHeight + 5 >= scrollHeight &&
+            !isFetching &&
+            !isLoading)
+        )
+          setPage(page + 1);
+      };
+      if (parentElem) {
+        parentElem.addEventListener("scroll", handleScroll);
       }
-      const scrollHeight = parentElem.scrollHeight;
-      const scrollTop = parentElem.scrollTop;
-      const clientHeight = parentElem.clientHeight;
+      return () => {
+        if (parentElem) parentElem.removeEventListener("scroll", handleScroll);
+      };
+    }, [page, isFetching, data.length, total, isLoading, scrollBack]);
+
+    useEffect(() => {
       if (
-        scrollTop + clientHeight + 5 >= scrollHeight &&
         !isFetching &&
+        page === 1 &&
+        listRef.current &&
+        focusLastItem &&
         !isLoading
       ) {
-        setPage(page + 1);
+        const lastElement = listRef.current.lastElementChild?.lastElementChild;
+        if (lastElement) {
+          lastElement.scrollIntoView({ behavior: "smooth" });
+        }
       }
-    };
-    if (parentElem) {
-      parentElem.addEventListener("scroll", handleScroll);
-    }
-    return () => {
-      if (parentElem) parentElem.removeEventListener("scroll", handleScroll);
-    };
-  }, [page, isFetching, data.length, total, isLoading]);
+    }, [isFetching, page, focusLastItem, isLoading]);
+    return (
+      <div
+        ref={mergeRefs([parentRef, ref])}
+        className={classNames(`${className} flex flex-col`)}
+      >
+        {isFetching && scrollBack && (
+          <div>
+            <LoadingSpinner />
+          </div>
+        )}
+        <div ref={listRef}>{children(data)}</div>
+        {isFetching && !scrollBack && (
+          <div>
+            <LoadingSpinner />
+          </div>
+        )}
+      </div>
+    );
+  }
+);
 
-  return (
-    <div ref={parentRef} className={classNames(`${className} flex flex-col`)}>
-      <div>{children(data)}</div>
-      {isFetching && (
-        <div>
-          <LoadingSpinner />
-        </div>
-      )}
-    </div>
-  );
-}
-
+InfiniteScroll.displayName = "Infinite Scroll";
 export default InfiniteScroll;

@@ -1,5 +1,6 @@
 import { chats, totalChats } from "@/store/features/chats";
 import { useGetChatsQuery } from "@/store/service/chats";
+import { ChatType } from "@/store/types/chats";
 import { useSelector } from "react-redux";
 import InfiniteScroll from "../InfiniteScroll";
 import Chat from "./components/chat";
@@ -10,12 +11,12 @@ const Chats = () => {
     <>
       <InfiniteScroll
         className="h-full overflow-y-auto"
-        query={useGetChatsQuery}
+        fetch={useGetChatsQuery}
         data={allChats}
         total={total}
       >
         {(data) =>
-          data.map((item: any) => {
+          data.map((item: ChatType) => {
             return <Chat key={item.id} chat={item} />;
           })
         }

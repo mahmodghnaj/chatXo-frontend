@@ -1,16 +1,54 @@
-import { currentChat } from "@/store/features/chats";
-import { useEffect, useState } from "react";
+import { currentChat, resetMessages } from "@/store/features/chats";
+import { SendMessageType } from "@/store/types/chats";
+import { useSocketIoClient } from "@/utilities/common/hooks/use-socket-io";
+import { ChangeEvent, useRef } from "react";
+import { FormEvent, KeyboardEvent, useEffect, useState } from "react";
 import { BsSend } from "react-icons/bs";
 import { FcMenu } from "react-icons/fc";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Portal from "../portal";
 import PortalRoot from "../portal-root";
 import Header from "./components/header";
+import Messages from "./components/messages";
 import NoData from "./components/no-data";
 
 const CurrentChat = () => {
+  const client = useSocketIoClient();
+  const refInput = useRef<HTMLTextAreaElement>(null);
+  const [value, setValue] = useState("");
   const current = useSelector(currentChat);
   const [showPortalRoot, setShowPortalRoot] = useState<boolean>(false);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    if (current) {
+      dispatch(resetMessages());
+    }
+  }, [current]);
+
+  const send = () => {
+    if (current)
+      client.send<SendMessageType>("message", {
+        receiver: current.user.id,
+        room: current.id,
+        text: value,
+      });
+    setValue("");
+  };
+  const sendMessage = (event: KeyboardEvent<HTMLTextAreaElement> | null) => {
+    if (!event) send();
+    if (event && event.key === "Enter" && !event.shiftKey) {
+      if (current) send();
+      event.preventDefault();
+      if (refInput.current) refInput.current.style.height = "3rem";
+    } else {
+      if (refInput.current && event) {
+        refInput.current.style.height = "auto";
+        refInput.current.style.height = `${
+          event.currentTarget.scrollHeight - 16
+        }px`;
+      }
+    }
+  };
   return (
     <>
       <div className="flex flex-col h-full w-full relative">
@@ -23,16 +61,29 @@ const CurrentChat = () => {
         {current ? (
           <>
             <Header
-              name={current?.user.firstName + " " + current?.user.lastName}
+              name={current.user.firstName + " " + current.user.lastName}
             />
-            <div className="flex-1">messages</div>
-            <div className="p-2 relative bg-base-300 py-3">
-              <input
-                className="input w-full  input-md"
+            <Messages
+              className="flex-1 overflow-y-auto"
+              receiver={current.user.id}
+              chatId={current.id}
+            />
+            <div className="p-2 relative  bg-base-300 py-2">
+              <textarea
+                className="textarea  w-full max-h-[150px] placeholder-shown:text-sm text-xl resize-none"
                 placeholder="Type a message"
-                type="text"
+                value={value}
+                ref={refInput}
+                rows={1}
+                tabIndex={0}
+                onKeyDown={(event) => sendMessage(event)}
+                onChange={(e) => setValue(e.target.value)}
               />
-              <button className="absolute top-6 right-2 btn btn-square btn-xs btn-ghost">
+              <button
+                onClick={() => sendMessage(null)}
+                disabled={!value}
+                className="absolute   bottom-8 right-6 btn btn-square btn-xs btn-ghost"
+              >
                 <BsSend className="h-4 w-4" />
               </button>
             </div>

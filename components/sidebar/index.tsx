@@ -50,9 +50,7 @@ const Sidebar = () => {
             </div>
           ))}
         </div>
-        <div className="h-16 border-t-success border-t-2 shadow-xl shad">
-          mahmod Ghnaj
-        </div>
+        <div className="h-16 border-t-success border-t-2 ">mahmod Ghnaj</div>
       </div>
     </>
   );

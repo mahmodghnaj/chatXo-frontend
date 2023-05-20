@@ -33,6 +33,7 @@
     "react-dom": "18.2.0",
     "react-hook-form": "^7.43.9",
     "react-icons": "^4.8.0",
+    "react-merge-refs": "^2.0.2",
     "react-redux": "^8.0.5",
     "react-toastify": "^9.1.2",
     "socket.io-client": "^4.6.1",
