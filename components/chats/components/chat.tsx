@@ -1,4 +1,8 @@
-import { currentChat, setCurrentChat } from "@/store/features/chats";
+import {
+  currentChat,
+  setCurrentChat,
+  loadingGetMessages,
+} from "@/store/features/chats";
 import { ChatType } from "@/store/types/chats";
 import { getChatDate } from "@/utilities/common/date";
 import { useDispatch } from "react-redux";
@@ -11,13 +15,14 @@ type ChatProps = {
 const Chat = ({ chat }: ChatProps) => {
   const dispatch = useDispatch();
   const current = useSelector(currentChat);
+  const loading = useSelector(loadingGetMessages);
   return (
     <>
       <div
-        onClick={() => dispatch(setCurrentChat(chat))}
-        className={`transition duration-200 ease-in-out pl-4 pt-4 hover:bg-base-content hover:bg-opacity-10 cursor-pointer ${
-          current?.id == chat.id && "bg-base-content bg-opacity-20"
-        }`}
+        onClick={() => !loading && dispatch(setCurrentChat(chat))}
+        className={`transition duration-200 ease-in-out pl-4 pt-4 hover:bg-base-content hover:bg-opacity-10 ${
+          loading ? "cursor-wait" : "cursor-pointer"
+        }  ${current?.id == chat.id && "bg-base-content bg-opacity-20"}`}
       >
         <div className="pr-4 flex items-center">
           <svg

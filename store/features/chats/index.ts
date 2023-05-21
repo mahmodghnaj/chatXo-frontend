@@ -7,11 +7,13 @@ export type State = {
   totalMessages: number | undefined;
   chats: ChatType[];
   totalChats: number | undefined;
+  loadingGetMessages: boolean;
 };
 const initialState: State = {
   currentChat: null,
   messages: [],
   totalMessages: undefined,
+  loadingGetMessages: false,
   chats: [],
   totalChats: undefined,
 };
@@ -29,7 +31,7 @@ export const chatsSlice = createSlice({
       state.totalChats = payload;
     },
     setMessages(state, { payload }: PayloadAction<MessageType[]>) {
-      state.messages.unshift(...payload);
+      state.messages.push(...payload);
     },
     setTotalMessages(state, { payload }: PayloadAction<number | undefined>) {
       state.totalMessages = payload;
@@ -41,6 +43,9 @@ export const chatsSlice = createSlice({
       state.messages = [];
       state.totalMessages = undefined;
     },
+    setLoadingGetMessages(state, { payload }: PayloadAction<boolean>) {
+      state.loadingGetMessages = payload;
+    },
   },
 });
 export const {
@@ -51,9 +56,13 @@ export const {
   setMessages,
   setTotalMessages,
   resetMessages,
+  setLoadingGetMessages,
 } = chatsSlice.actions;
 export const currentChat = (state: RootState) => state.Chats.currentChat;
 export const chats = (state: RootState) => state.Chats.chats;
 export const totalChats = (state: RootState) => state.Chats.totalChats;
-export const messages = (state: RootState) => state.Chats.messages;
+export const messages = (state: RootState) =>
+  [...state.Chats.messages].reverse();
 export const totalMessages = (state: RootState) => state.Chats.totalMessages;
+export const loadingGetMessages = (state: RootState) =>
+  state.Chats.loadingGetMessages;

@@ -1,11 +1,11 @@
-import { currentChat, resetMessages } from "@/store/features/chats";
+import { currentChat } from "@/store/features/chats";
 import { SendMessageType } from "@/store/types/chats";
 import { useSocketIoClient } from "@/utilities/common/hooks/use-socket-io";
-import { ChangeEvent, useRef } from "react";
-import { FormEvent, KeyboardEvent, useEffect, useState } from "react";
+import { useRef } from "react";
+import { KeyboardEvent, useEffect, useState } from "react";
 import { BsSend } from "react-icons/bs";
 import { FcMenu } from "react-icons/fc";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import Portal from "../portal";
 import PortalRoot from "../portal-root";
 import Header from "./components/header";
@@ -18,12 +18,6 @@ const CurrentChat = () => {
   const [value, setValue] = useState("");
   const current = useSelector(currentChat);
   const [showPortalRoot, setShowPortalRoot] = useState<boolean>(false);
-  const dispatch = useDispatch();
-  useEffect(() => {
-    if (current) {
-      dispatch(resetMessages());
-    }
-  }, [current]);
 
   const send = () => {
     if (current)
@@ -82,7 +76,7 @@ const CurrentChat = () => {
               <button
                 onClick={() => sendMessage(null)}
                 disabled={!value}
-                className="absolute   bottom-8 right-6 btn btn-square btn-xs btn-ghost"
+                className="absolute bottom-7 right-6 btn btn-square btn-xs btn-ghost"
               >
                 <BsSend className="h-4 w-4" />
               </button>
@@ -92,7 +86,6 @@ const CurrentChat = () => {
           <NoData />
         )}
       </div>
-
       {showPortalRoot && (
         <Portal>
           <PortalRoot setShowPortalRoot={() => setShowPortalRoot(false)} />

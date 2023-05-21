@@ -40,9 +40,7 @@ const InfiniteScroll = forwardRef<HTMLDivElement, InfiniteScrollProps>(
       const parentElem = parentRef.current;
       const handleScroll = () => {
         if (!parentElem) return;
-        if (!total) {
-          return;
-        }
+        if (!total) return;
         if (data.length >= total) {
           parentElem.removeEventListener("scroll", handleScroll);
           return;
@@ -50,8 +48,9 @@ const InfiniteScroll = forwardRef<HTMLDivElement, InfiniteScrollProps>(
         const scrollHeight = parentElem.scrollHeight;
         const scrollTop = parentElem.scrollTop;
         const clientHeight = parentElem.clientHeight;
+
         if (
-          (scrollBack && scrollTop === 0) ||
+          (scrollBack && scrollTop <= 300 && !isFetching && !isLoading) ||
           (!scrollBack &&
             scrollTop + clientHeight + 5 >= scrollHeight &&
             !isFetching &&
@@ -77,7 +76,7 @@ const InfiniteScroll = forwardRef<HTMLDivElement, InfiniteScrollProps>(
       ) {
         const lastElement = listRef.current.lastElementChild?.lastElementChild;
         if (lastElement) {
-          lastElement.scrollIntoView({ behavior: "smooth" });
+          lastElement.scrollIntoView({ behavior: "auto" });
         }
       }
     }, [isFetching, page, focusLastItem, isLoading]);

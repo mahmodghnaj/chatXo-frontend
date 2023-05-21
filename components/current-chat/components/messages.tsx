@@ -1,10 +1,10 @@
 import InfiniteScroll from "@/components/InfiniteScroll";
-import { messages, totalMessages } from "@/store/features/chats";
+import { messages, resetMessages, totalMessages } from "@/store/features/chats";
 import { useGetMessageQuery } from "@/store/service/chats";
 import { MessageType } from "@/store/types/chats";
-import Image from "next/image";
-import { useEffect, useRef } from "react";
-import { useSelector } from "react-redux";
+import classNames from "classnames";
+import { useLayoutEffect, useRef } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 type PropsComponents = {
   chatId: string;
@@ -16,6 +16,11 @@ const Messages = ({ chatId, className, receiver }: PropsComponents) => {
   const infiniteScroll = useRef(null);
   const allMessages = useSelector(messages);
   const total = useSelector(totalMessages);
+  const dispatch = useDispatch();
+
+  useLayoutEffect(() => {
+    dispatch(resetMessages());
+  }, [chatId, dispatch]);
   return (
     <>
       <InfiniteScroll
@@ -26,18 +31,20 @@ const Messages = ({ chatId, className, receiver }: PropsComponents) => {
         queryParams={chatId}
         className={className}
         focusLastItem
+        key={chatId}
         scrollBack
       >
         {(data) => {
           return (
             <>
-              <div>
+              <div className="px-5">
                 {data.map((item: MessageType) => (
                   <div
-                    className={`chat chat-${
-                      item.receiver == receiver ? "end" : "start"
-                    }`}
                     key={item.id}
+                    className={classNames("chat", {
+                      "chat-start": receiver == item.receiver,
+                      "chat-end": receiver != item.receiver,
+                    })}
                   >
                     <div className="chat-bubble">{item.text}</div>
                   </div>

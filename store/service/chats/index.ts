@@ -1,5 +1,6 @@
 import {
   setChats,
+  setLoadingGetMessages,
   setMessages,
   setTotalChats,
   setTotalMessages,
@@ -48,6 +49,11 @@ export const chatsApi = baseApi.injectEndpoints({
         },
         forceRefetch({ currentArg, previousArg }) {
           return currentArg !== previousArg;
+        },
+        async onQueryStarted(arg, { dispatch, queryFulfilled }) {
+          dispatch(setLoadingGetMessages(true));
+          await queryFulfilled;
+          dispatch(setLoadingGetMessages(false));
         },
       }),
     };
