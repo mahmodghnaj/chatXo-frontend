@@ -1,4 +1,4 @@
-import InfiniteScroll from "@/components/InfiniteScroll";
+import InfiniteScroll from "@/components/infinite-scroll";
 import { messages, resetMessages, totalMessages } from "@/store/features/chats";
 import { useGetMessageQuery } from "@/store/service/chats";
 import { MessageType } from "@/store/types/chats";

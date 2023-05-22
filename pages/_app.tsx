@@ -2,7 +2,6 @@ import { ReactElement, ReactNode, useEffect } from "react";
 import type { NextPage } from "next";
 import type { AppContext, AppProps } from "next/app";
 import "@/styles/globals.css";
-import useLocalStorage from "@/utilities/common/hooks/use-local-storage";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Provider } from "react-redux";
@@ -19,12 +18,6 @@ type AppPropsWithLayout = AppProps & {
   refreshToken?: string;
 };
 const App = ({ Component, pageProps, ...res }: AppPropsWithLayout) => {
-  // Set Theme
-  const [myTheme] = useLocalStorage<string>("theme", "light");
-  useEffect(() => {
-    document.body.setAttribute("data-theme", myTheme);
-  }, []);
-  //
   if (res.refreshToken) {
     store.dispatch(setRefreshToken(res.refreshToken));
   }

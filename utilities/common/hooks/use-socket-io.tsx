@@ -5,7 +5,6 @@ import SocketIoClient from "../socketIo-client";
 interface SocketIoContextValue {
   socketIoClient: SocketIoClient | null;
 }
-
 const socketIoContext = createContext<SocketIoContextValue>({
   socketIoClient: null,
 });
@@ -25,7 +24,7 @@ export function ProvideSocketIoClient({ children }: Props) {
 
 export function useSocketIoClient() {
   const context = useContext(socketIoContext);
-  if (context.socketIoClient === null) {
+  if (context.socketIoClient === null && typeof window !== "undefined") {
     throw new Error(
       "useSocketIoClient must be used within a ProvideSocketIoClient"
     );
@@ -39,6 +38,7 @@ function useProvideSocketIoClient() {
     token: Cookies.get("accessToken"),
   };
   const clientRef = useRef<SocketIoClient | null>(null);
+  if (typeof window === "undefined") return null;
   if (!clientRef.current) {
     clientRef.current = new SocketIoClient(config);
     clientRef.current.on("connect", () => {
