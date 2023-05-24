@@ -1,39 +1,38 @@
-import { currentChat } from "@/store/features/chats";
-import { SendMessageType } from "@/store/types/chats";
-import { useSocketIoClient } from "@/utilities/common/hooks/use-socket-io";
-import { useRef } from "react";
-import { KeyboardEvent, useEffect, useState } from "react";
+import { LocalCurrentChatType, ChatType } from "@/store/types/chats";
+import { FC, useRef } from "react";
+import { KeyboardEvent, useState } from "react";
 import { BsSend } from "react-icons/bs";
 import { FcMenu } from "react-icons/fc";
-import { useSelector } from "react-redux";
 import Portal from "../portal";
 import PortalRoot from "../portal-root";
 import Header from "./components/header";
 import Messages from "./components/messages";
 import NoData from "./components/no-data";
 
-const CurrentChat = () => {
-  const client = useSocketIoClient();
+export type ComponentProps = {
+  send: (value: string) => void;
+  currentChat: ChatType | null;
+  localCurrentChat: LocalCurrentChatType | null;
+};
+const CurrentChat: FC<ComponentProps> = ({
+  send,
+  currentChat,
+  localCurrentChat,
+}) => {
   const refInput = useRef<HTMLTextAreaElement>(null);
   const [value, setValue] = useState("");
-  const current = useSelector(currentChat);
   const [showPortalRoot, setShowPortalRoot] = useState<boolean>(false);
 
-  const send = () => {
-    if (current)
-      client.send<SendMessageType>("message", {
-        receiver: current.user.id,
-        room: current.id,
-        text: value,
-      });
-    setValue("");
-  };
   const sendMessage = (event: KeyboardEvent<HTMLTextAreaElement> | null) => {
-    if (!event) send();
+    if (!event) {
+      send(value);
+      setValue("");
+    }
     if (event && event.key === "Enter" && !event.shiftKey) {
-      if (current) send();
       event.preventDefault();
-      if (refInput.current) refInput.current.style.height = "3rem";
+      refInput.current && (refInput.current.style.height = "3rem");
+      send(value);
+      setValue("");
     } else {
       if (refInput.current && event) {
         refInput.current.style.height = "auto";
@@ -43,6 +42,11 @@ const CurrentChat = () => {
       }
     }
   };
+
+  const name = localCurrentChat
+    ? localCurrentChat.firstName + " " + localCurrentChat.lastName
+    : currentChat?.user.firstName + " " + currentChat?.user.lastName;
+
   return (
     <>
       <div className="flex flex-col h-full w-full relative">
@@ -52,19 +56,13 @@ const CurrentChat = () => {
         >
           <FcMenu className="h-6 w-6" />
         </button>
-        {current ? (
+        {localCurrentChat && (
           <>
-            <Header
-              name={current.user.firstName + " " + current.user.lastName}
-            />
-            <Messages
-              className="flex-1 overflow-y-auto"
-              receiver={current.user.id}
-              chatId={current.id}
-            />
-            <div className="p-2 relative  bg-base-300 py-2">
+            <Header name={name} />
+            <div className="flex-1 overflow-y-auto"></div>
+            <div className="p-2 relative bg-base-300 py-2">
               <textarea
-                className="textarea  w-full max-h-[150px] placeholder-shown:text-sm text-xl resize-none"
+                className="textarea w-full max-h-[150px] placeholder-shown:text-sm text-xl resize-none"
                 placeholder="Type a message"
                 value={value}
                 ref={refInput}
@@ -82,9 +80,37 @@ const CurrentChat = () => {
               </button>
             </div>
           </>
-        ) : (
-          <NoData />
         )}
+        {currentChat && (
+          <>
+            <Header name={name} />
+            <Messages
+              className="flex-1 overflow-y-auto"
+              receiver={currentChat.user.id}
+              chatId={currentChat.id}
+            />
+            <div className="p-2 relative bg-base-300 py-2">
+              <textarea
+                className="textarea w-full max-h-[150px] placeholder-shown:text-sm text-xl resize-none"
+                placeholder="Type a message"
+                value={value}
+                ref={refInput}
+                rows={1}
+                tabIndex={0}
+                onKeyDown={(event) => sendMessage(event)}
+                onChange={(e) => setValue(e.target.value)}
+              />
+              <button
+                onClick={() => sendMessage(null)}
+                disabled={!value}
+                className="absolute bottom-7 right-6 btn btn-square btn-xs btn-ghost"
+              >
+                <BsSend className="h-4 w-4" />
+              </button>
+            </div>
+          </>
+        )}
+        {!localCurrentChat && !currentChat && <NoData />}
       </div>
       {showPortalRoot && (
         <Portal>

@@ -1,6 +1,8 @@
 import {
   setChats,
+  setCurrentChat,
   setLoadingGetMessages,
+  setLocalCurrentChat,
   setMessages,
   setTotalChats,
   setTotalMessages,
@@ -56,8 +58,36 @@ export const chatsApi = baseApi.injectEndpoints({
           dispatch(setLoadingGetMessages(false));
         },
       }),
+      checkChat: builder.mutation<{ room: ChatType | null }, string>({
+        query: (id) => ({
+          url: `room/check/${id}`,
+          onSuccess: async (dispatch, data) => {
+            const res = data as { room: ChatType | null };
+            if (res.room) {
+              dispatch(setCurrentChat(res.room));
+            }
+          },
+        }),
+      }),
+      addRoom: builder.mutation<ChatType, { user: string }>({
+        query: (body) => ({
+          url: `room`,
+          method: "post",
+          data: body,
+          onSuccess: async (dispatch, data) => {
+            const res = data as ChatType;
+            dispatch(setCurrentChat(res));
+            dispatch(setLocalCurrentChat(null));
+          },
+        }),
+      }),
     };
   },
 });
 
-export const { useGetChatsQuery, useGetMessageQuery } = chatsApi;
+export const {
+  useGetChatsQuery,
+  useGetMessageQuery,
+  useCheckChatMutation,
+  useAddRoomMutation,
+} = chatsApi;

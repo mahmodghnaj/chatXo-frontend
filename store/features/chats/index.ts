@@ -1,8 +1,13 @@
 import { RootState } from "@/store";
-import { ChatType, MessageType } from "@/store/types/chats";
+import {
+  ChatType,
+  LocalCurrentChatType,
+  MessageType,
+} from "@/store/types/chats";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 export type State = {
   currentChat: ChatType | null;
+  localCurrentChat: LocalCurrentChatType | null;
   messages: MessageType[];
   totalMessages: number | undefined;
   chats: ChatType[];
@@ -11,6 +16,7 @@ export type State = {
 };
 const initialState: State = {
   currentChat: null,
+  localCurrentChat: null,
   messages: [],
   totalMessages: undefined,
   loadingGetMessages: false,
@@ -46,6 +52,18 @@ export const chatsSlice = createSlice({
     setLoadingGetMessages(state, { payload }: PayloadAction<boolean>) {
       state.loadingGetMessages = payload;
     },
+    addNewMessage(state, { payload }: PayloadAction<MessageType>) {
+      if (state?.currentChat?.id == payload.room) {
+        state.messages.unshift(payload);
+        if (state.totalMessages) state.totalMessages += 1;
+      }
+    },
+    setLocalCurrentChat(
+      state,
+      { payload }: PayloadAction<LocalCurrentChatType | null>
+    ) {
+      state.localCurrentChat = payload;
+    },
   },
 });
 export const {
@@ -57,6 +75,8 @@ export const {
   setTotalMessages,
   resetMessages,
   setLoadingGetMessages,
+  addNewMessage,
+  setLocalCurrentChat,
 } = chatsSlice.actions;
 export const currentChat = (state: RootState) => state.Chats.currentChat;
 export const chats = (state: RootState) => state.Chats.chats;
@@ -66,3 +86,6 @@ export const messages = (state: RootState) =>
 export const totalMessages = (state: RootState) => state.Chats.totalMessages;
 export const loadingGetMessages = (state: RootState) =>
   state.Chats.loadingGetMessages;
+
+export const localCurrentChat = (state: RootState) =>
+  state.Chats.localCurrentChat;

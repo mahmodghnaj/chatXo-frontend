@@ -1,11 +1,17 @@
 import { defaultPagination } from "@/lib/data";
 import classNames from "classnames";
-import React, { forwardRef, useEffect, useRef, useState } from "react";
+import React, {
+  forwardRef,
+  useEffect,
+  useImperativeHandle,
+  useRef,
+  useState,
+} from "react";
 import { mergeRefs } from "react-merge-refs";
 import LoadingSpinner from "../loading-spinner";
 import { InfiniteScrollProps } from "./type";
 
-const InfiniteScroll = forwardRef<HTMLDivElement, InfiniteScrollProps>(
+const InfiniteScroll = forwardRef<any, InfiniteScrollProps>(
   (
     {
       fetch,
@@ -35,6 +41,23 @@ const InfiniteScroll = forwardRef<HTMLDivElement, InfiniteScrollProps>(
       {
         skip: !!(total && data.length >= total),
       }
+    );
+    useImperativeHandle(
+      ref,
+      () => {
+        return {
+          backToBottom() {
+            if (listRef.current) {
+              const lastElement =
+                listRef.current.lastElementChild?.lastElementChild;
+              if (lastElement) {
+                lastElement.scrollIntoView({ behavior: "auto" });
+              }
+            }
+          },
+        };
+      },
+      []
     );
     useEffect(() => {
       const parentElem = parentRef.current;
@@ -81,10 +104,7 @@ const InfiniteScroll = forwardRef<HTMLDivElement, InfiniteScrollProps>(
       }
     }, [isFetching, page, focusLastItem, isLoading]);
     return (
-      <div
-        ref={mergeRefs([parentRef, ref])}
-        className={classNames(`${className} flex flex-col`)}
-      >
+      <div ref={parentRef} className={classNames(`${className} flex flex-col`)}>
         {isFetching && scrollBack && (
           <div>
             <LoadingSpinner />

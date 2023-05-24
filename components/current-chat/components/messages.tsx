@@ -3,7 +3,7 @@ import { messages, resetMessages, totalMessages } from "@/store/features/chats";
 import { useGetMessageQuery } from "@/store/service/chats";
 import { MessageType } from "@/store/types/chats";
 import classNames from "classnames";
-import { useLayoutEffect, useRef } from "react";
+import { useEffect, useLayoutEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 type PropsComponents = {
@@ -17,10 +17,15 @@ const Messages = ({ chatId, className, receiver }: PropsComponents) => {
   const allMessages = useSelector(messages);
   const total = useSelector(totalMessages);
   const dispatch = useDispatch();
-
   useLayoutEffect(() => {
     dispatch(resetMessages());
   }, [chatId, dispatch]);
+
+  useEffect(() => {
+    if (total && infiniteScroll?.current) {
+      infiniteScroll.current.backToBottom();
+    }
+  }, [total]);
   return (
     <>
       <InfiniteScroll

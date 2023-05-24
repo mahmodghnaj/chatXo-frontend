@@ -7,13 +7,13 @@ export default function Document() {
       <Head></Head>
       <body>
         <Main />
-        <div id="portal" />
         <NextScript />
-        <Script id="change-theme">
+        <Script id="change-theme" strategy="beforeInteractive">
           {`(function () {
             try {
               var d = document.documentElement;
               var e = localStorage.getItem("theme");
+               e= e.replace(/"/g, '');
               if ((!e && true)) {
                 var t = '(prefers-color-scheme: dark)';
                 var m = window.matchMedia(t);

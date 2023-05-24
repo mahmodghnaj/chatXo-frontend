@@ -1,7 +1,9 @@
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Friends from "@/components/friends";
 import Chats from "@/components/chats";
+import InfoUser from "./components/info-user";
+
 export type TabsType = {
   label: string;
   content: any;
@@ -50,7 +52,7 @@ const Sidebar = () => {
             </div>
           ))}
         </div>
-        <div className="h-16 border-t-success border-t-2 ">mahmod Ghnaj</div>
+        <InfoUser />
       </div>
     </>
   );

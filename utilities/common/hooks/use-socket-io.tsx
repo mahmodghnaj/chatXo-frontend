@@ -33,11 +33,14 @@ export function useSocketIoClient() {
 }
 
 function useProvideSocketIoClient() {
+  const clientRef = useRef<SocketIoClient | null>(null);
+  const url = process.env.NEXT_PUBLIC_BASE_URL;
+  if (!url) return null;
   const config = {
-    url: process.env.NEXT_PUBLIC_BASE_URL?.toString().replace("api/", ""),
+    url:
+      process.env.NEXT_PUBLIC_BASE_URL?.toString().replace("api/", "") ?? "/",
     token: Cookies.get("accessToken"),
   };
-  const clientRef = useRef<SocketIoClient | null>(null);
   if (typeof window === "undefined") return null;
   if (!clientRef.current) {
     clientRef.current = new SocketIoClient(config);

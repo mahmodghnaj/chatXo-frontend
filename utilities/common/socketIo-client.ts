@@ -2,7 +2,7 @@ import io, { Socket } from "socket.io-client";
 import { EventEmitter } from "events";
 
 interface SocketConfig {
-  url?: string;
+  url: string;
   token?: string;
 }
 
@@ -47,7 +47,7 @@ export default class SocketIoClient extends EventEmitter {
   }
 
   subscribe(event: string, callback: Function) {
-    this.socket?.on(event, callback);
+    this.socket?.on(event, (arg) => callback(arg));
   }
 
   send<T>(event: string, data: T) {

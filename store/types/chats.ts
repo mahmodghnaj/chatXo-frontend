@@ -23,3 +23,8 @@ export interface SendMessageType {
   room: string;
   receiver: string;
 }
+export interface LocalCurrentChatType {
+  id: string;
+  firstName: string;
+  lastName: string;
+}

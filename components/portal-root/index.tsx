@@ -25,7 +25,7 @@ const PortalRoot = ({ setShowPortalRoot }: PropsCompnents) => {
       setShowPortalRoot();
     }, 320);
   };
-  const stopPropagatio = (event: React.MouseEvent<HTMLDivElement>) => {
+  const stopPropagation = (event: React.MouseEvent<HTMLDivElement>) => {
     event.stopPropagation();
   };
   useEffect(() => {
@@ -43,7 +43,7 @@ const PortalRoot = ({ setShowPortalRoot }: PropsCompnents) => {
         ></div>
         <div onClick={hidePortalRoot} className="fixed flex inset-0">
           <div
-            onClick={stopPropagatio}
+            onClick={stopPropagation}
             className={`relative flex w-full max-w-xs flex-1  flex-col transition-transform duration-300 ease-in-out ${
               mounted ? "translate-x-0" : "-translate-x-full"
             }`}

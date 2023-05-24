@@ -20,7 +20,7 @@ const Portal: React.FC<PortalProps> = ({ children }) => {
     return null;
   }
 
-  const portalContainer = document.getElementById("portal");
+  const portalContainer = document.body;
 
   if (portalContainer) {
     return ReactDOM.createPortal(children, portalContainer);
