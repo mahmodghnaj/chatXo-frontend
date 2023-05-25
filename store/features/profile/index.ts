@@ -18,9 +18,28 @@ export const profileSlice = createSlice({
     updateProfile(state, { payload }: PayloadAction<MyProfileType>) {
       state.profile = { ...state.profile, ...payload };
     },
+    acceptFriend(state, { payload }: PayloadAction<string>) {
+      const recipientObj = state.profile?.friends.find(
+        (obj) => obj.recipient.id === payload
+      );
+      if (recipientObj) recipientObj.status = 3;
+    },
+    rejectFriend(state, { payload }: PayloadAction<string>) {
+      const recipientIndex = state.profile?.friends.findIndex(
+        (obj) => obj.recipient.id === payload
+      );
+      if (recipientIndex && recipientIndex !== -1) {
+        state.profile?.friends.splice(recipientIndex, 1);
+      }
+    },
   },
 });
-export const { setProfile, updateProfile } = profileSlice.actions;
+export const { setProfile, updateProfile, acceptFriend, rejectFriend } =
+  profileSlice.actions;
 export const profile = (state: RootState) => state.Profile.profile;
 export const friends = (state: RootState) =>
   state.Profile.profile?.friends.filter((item) => item.status === 3);
+export const friendshipRequests = (state: RootState) =>
+  state.Profile.profile?.friends.filter((item) => item.status === 2);
+export const friendsSending = (state: RootState) =>
+  state.Profile.profile?.friends.filter((item) => item.status === 1);

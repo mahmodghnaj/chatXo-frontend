@@ -6,6 +6,8 @@ export interface ChatType {
     lastName: string;
     email: string;
   };
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 export interface MessageType {

@@ -1,4 +1,9 @@
-import { setProfile, updateProfile } from "@/store/features/profile";
+import {
+  acceptFriend,
+  rejectFriend,
+  setProfile,
+  updateProfile,
+} from "@/store/features/profile";
 import { MyProfileType, UpdateProfile } from "@/store/types/auth";
 import { baseApi } from "..";
 export const chatsApi = baseApi.injectEndpoints({
@@ -24,8 +29,45 @@ export const chatsApi = baseApi.injectEndpoints({
           },
         }),
       }),
+      searchFriends: builder.mutation<
+        { data: MyProfileType[] },
+        { name: string }
+      >({
+        query: (arg) => ({
+          url: "users/search",
+          params: arg,
+        }),
+      }),
+      acceptFriend: builder.mutation<{ friendId: string }, string>({
+        query: (arg) => ({
+          url: "friends/accept",
+          method: "patch",
+          data: { idFriend: arg },
+          onSuccess: async (dispatch, data) => {
+            const res = data as { friendId: string };
+            dispatch(acceptFriend(res.friendId));
+          },
+        }),
+      }),
+      rejectFriend: builder.mutation<{ friendId: string }, string>({
+        query: (arg) => ({
+          url: "friends/reject",
+          method: "patch",
+          data: { idFriend: arg },
+          onSuccess: async (dispatch, data) => {
+            const res = data as { friendId: string };
+            dispatch(rejectFriend(res.friendId));
+          },
+        }),
+      }),
     };
   },
 });
 
-export const { useGetProfileQuery, useUpdateProfileMutation } = chatsApi;
+export const {
+  useGetProfileQuery,
+  useUpdateProfileMutation,
+  useSearchFriendsMutation,
+  useAcceptFriendMutation,
+  useRejectFriendMutation,
+} = chatsApi;

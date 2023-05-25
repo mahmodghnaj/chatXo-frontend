@@ -23,24 +23,24 @@ const CurrentChat: FC<ComponentProps> = ({
   const [value, setValue] = useState("");
   const [showPortalRoot, setShowPortalRoot] = useState<boolean>(false);
 
-  const sendMessage = (event: KeyboardEvent<HTMLTextAreaElement> | null) => {
-    if (!event) {
-      send(value);
-      setValue("");
+  const sendMessage = () => {
+    send(value);
+    setValue("");
+  };
+  const increaseHeight = (event: KeyboardEvent<HTMLTextAreaElement>) => {
+    if (refInput.current) {
+      refInput.current.style.height = "auto";
+      refInput.current.style.height = `${
+        event.currentTarget.scrollHeight - 16
+      }px`;
     }
-    if (event && event.key === "Enter" && !event.shiftKey) {
-      event.preventDefault();
+  };
+  const handelMessage = (event: KeyboardEvent<HTMLTextAreaElement>) => {
+    if (event.key === "Enter" && !event.shiftKey) {
+      event.preventDefault(); // don't down line
       refInput.current && (refInput.current.style.height = "3rem");
-      send(value);
-      setValue("");
-    } else {
-      if (refInput.current && event) {
-        refInput.current.style.height = "auto";
-        refInput.current.style.height = `${
-          event.currentTarget.scrollHeight - 16
-        }px`;
-      }
-    }
+      sendMessage();
+    } else increaseHeight(event);
   };
 
   const name = localCurrentChat
@@ -68,11 +68,11 @@ const CurrentChat: FC<ComponentProps> = ({
                 ref={refInput}
                 rows={1}
                 tabIndex={0}
-                onKeyDown={(event) => sendMessage(event)}
+                onKeyDown={(event) => handelMessage(event)}
                 onChange={(e) => setValue(e.target.value)}
               />
               <button
-                onClick={() => sendMessage(null)}
+                onClick={() => sendMessage()}
                 disabled={!value}
                 className="absolute bottom-7 right-6 btn btn-square btn-xs btn-ghost"
               >
@@ -97,11 +97,11 @@ const CurrentChat: FC<ComponentProps> = ({
                 ref={refInput}
                 rows={1}
                 tabIndex={0}
-                onKeyDown={(event) => sendMessage(event)}
+                onKeyDown={(event) => handelMessage(event)}
                 onChange={(e) => setValue(e.target.value)}
               />
               <button
-                onClick={() => sendMessage(null)}
+                onClick={() => sendMessage()}
                 disabled={!value}
                 className="absolute bottom-7 right-6 btn btn-square btn-xs btn-ghost"
               >

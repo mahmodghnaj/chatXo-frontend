@@ -1,52 +1,20 @@
 import TextOverflow from "@/components/text-overflow";
 import {
-  chats,
-  currentChat as currentChatData,
-  setCurrentChat,
-  setLocalCurrentChat,
-} from "@/store/features/chats";
-import { useCheckChatMutation } from "@/store/service/chats";
-import { Friend } from "@/store/types/auth";
-import { useEffect } from "react";
-import { FiMessageSquare } from "react-icons/fi";
-import { useDispatch, useSelector } from "react-redux";
+  useAcceptFriendMutation,
+  useRejectFriendMutation,
+} from "@/store/service/profile";
+import { Friend as FriendType } from "@/store/types/auth";
 
 export type ComponentProps = {
-  friend: Friend;
+  friend: FriendType;
 };
 const Friend = ({ friend }: ComponentProps) => {
-  const [checkChat, { isLoading, isSuccess }] = useCheckChatMutation();
-  const dispatch = useDispatch();
-  const currentChat = useSelector(currentChatData);
-  const allChats = useSelector(chats);
-
-  const checkLocal = () => {
-    const index = allChats.findIndex(
-      (item) => item.user.id === friend.recipient.id
-    );
-    if (index === -1) return null;
-    dispatch(setCurrentChat(allChats[index]));
-  };
-  const goToChat = () => {
-    const check = checkLocal();
-    if (check === null) checkChat(friend.recipient.id);
-  };
-  useEffect(() => {
-    if (isSuccess) {
-      // don't have any chat before
-      if (!currentChat)
-        dispatch(
-          setLocalCurrentChat({
-            id: friend.recipient.id,
-            firstName: friend.recipient.firstName,
-            lastName: friend.recipient.lastName,
-          })
-        );
-    }
-  }, [isSuccess]);
+  const [acceptFriend, { isLoading }] = useAcceptFriendMutation();
+  const [rejectFriend, { isLoading: isLoadingReject }] =
+    useRejectFriendMutation();
   return (
     <>
-      <div className="flex items-center justify-between mb-2">
+      <div className="flex w-full items-center  justify-between mb-2">
         <div className=" flex items-center">
           <svg
             viewBox="0 0 212 212"
@@ -74,7 +42,7 @@ const Friend = ({ friend }: ComponentProps) => {
               ></path>
             </g>
           </svg>
-          <div className="ml-2 max-w-[8rem] text-lg font-extrabold">
+          <div className="ml-2  text-lg font-extrabold">
             <TextOverflow
               text={
                 friend.recipient.firstName + " " + friend.recipient.lastName
@@ -82,20 +50,29 @@ const Friend = ({ friend }: ComponentProps) => {
             />
           </div>
         </div>
-        <button
-          className={`btn btn-outline btn-sm capitalize ${
-            isLoading && "loading"
-          }`}
-          onClick={() => goToChat()}
-          type="button"
-        >
-          <FiMessageSquare className="mr-1" />
-          Message
-        </button>
+        <div className="flex p-2 space-x-2">
+          <button
+            onClick={() => acceptFriend(friend.recipient.id)}
+            className={`btn btn-success btn-md capitalize ${
+              isLoading && "loading"
+            }`}
+            type="button"
+          >
+            Accept
+          </button>
+          <button
+            onClick={() => rejectFriend(friend.recipient.id)}
+            className={`btn btn-error btn-md capitalize ${
+              isLoadingReject && "loading"
+            }`}
+            type="button"
+          >
+            Reject
+          </button>
+        </div>
       </div>
-      <div className="divider my-3"></div>
+      <div className="divider my-4"></div>
     </>
   );
 };
-
 export default Friend;

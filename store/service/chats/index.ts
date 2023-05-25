@@ -1,4 +1,5 @@
 import {
+  addNewChat,
   setChats,
   setCurrentChat,
   setLoadingGetMessages,
@@ -78,6 +79,7 @@ export const chatsApi = baseApi.injectEndpoints({
             const res = data as ChatType;
             dispatch(setCurrentChat(res));
             dispatch(setLocalCurrentChat(null));
+            dispatch(addNewChat(res));
           },
         }),
       }),

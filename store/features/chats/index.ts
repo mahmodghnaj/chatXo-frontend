@@ -1,19 +1,21 @@
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "@/store";
 import {
   ChatType,
   LocalCurrentChatType,
   MessageType,
 } from "@/store/types/chats";
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-export type State = {
+
+interface State {
   currentChat: ChatType | null;
   localCurrentChat: LocalCurrentChatType | null;
   messages: MessageType[];
-  totalMessages: number | undefined;
-  chats: ChatType[];
-  totalChats: number | undefined;
+  totalMessages?: number;
   loadingGetMessages: boolean;
-};
+  chats: ChatType[];
+  totalChats?: number;
+}
+
 const initialState: State = {
   currentChat: null,
   localCurrentChat: null,
@@ -23,49 +25,68 @@ const initialState: State = {
   chats: [],
   totalChats: undefined,
 };
+
 export const chatsSlice = createSlice({
   name: "Chats",
   initialState,
   reducers: {
-    setCurrentChat(state, { payload }: PayloadAction<ChatType>) {
+    setCurrentChat: (state, { payload }: PayloadAction<ChatType>) => {
       state.currentChat = payload;
     },
-    setChats(state, { payload }: PayloadAction<ChatType[]>) {
+    setChats: (state, { payload }: PayloadAction<ChatType[]>) => {
       state.chats.push(...payload);
     },
-    setTotalChats(state, { payload }: PayloadAction<number | undefined>) {
+    setTotalChats: (state, { payload }: PayloadAction<number | undefined>) => {
       state.totalChats = payload;
     },
-    setMessages(state, { payload }: PayloadAction<MessageType[]>) {
+    setMessages: (state, { payload }: PayloadAction<MessageType[]>) => {
       state.messages.push(...payload);
     },
-    setTotalMessages(state, { payload }: PayloadAction<number | undefined>) {
+    setTotalMessages: (
+      state,
+      { payload }: PayloadAction<number | undefined>
+    ) => {
       state.totalMessages = payload;
     },
-    resetChats(state) {
+    resetChats: (state) => {
       state.chats = [];
     },
-    resetMessages(state) {
+    resetMessages: (state) => {
       state.messages = [];
       state.totalMessages = undefined;
     },
-    setLoadingGetMessages(state, { payload }: PayloadAction<boolean>) {
+    setLoadingGetMessages: (state, { payload }: PayloadAction<boolean>) => {
       state.loadingGetMessages = payload;
     },
-    addNewMessage(state, { payload }: PayloadAction<MessageType>) {
-      if (state?.currentChat?.id == payload.room) {
+    addNewMessage: (state, { payload }: PayloadAction<MessageType>) => {
+      if (state.currentChat?.id === payload.room) {
         state.messages.unshift(payload);
-        if (state.totalMessages) state.totalMessages += 1;
+        if (state.totalMessages) {
+          state.totalMessages += 1;
+        }
       }
     },
-    setLocalCurrentChat(
+    setLocalCurrentChat: (
       state,
       { payload }: PayloadAction<LocalCurrentChatType | null>
-    ) {
+    ) => {
       state.localCurrentChat = payload;
+    },
+    addNewChat: (state, { payload }: PayloadAction<ChatType>) => {
+      state.chats.unshift(payload);
+    },
+    setFirstChatItem(state) {
+      const index = state.chats.findIndex(
+        (item) => item.id === state.currentChat?.id
+      );
+      if (index !== -1 && state.currentChat) {
+        state.chats.splice(index, 1);
+        state.chats.unshift(state.currentChat);
+      }
     },
   },
 });
+
 export const {
   setCurrentChat,
   setChats,
@@ -77,15 +98,24 @@ export const {
   setLoadingGetMessages,
   addNewMessage,
   setLocalCurrentChat,
+  addNewChat,
+  setFirstChatItem,
 } = chatsSlice.actions;
+
 export const currentChat = (state: RootState) => state.Chats.currentChat;
-export const chats = (state: RootState) => state.Chats.chats;
+export const chats = (state: RootState) => {
+  const data = [...state.Chats.chats];
+  return data.sort((a, b) => {
+    const updatedAtA = new Date(a.updatedAt);
+    const updatedAtB = new Date(b.updatedAt);
+    return updatedAtB.getTime() - updatedAtA.getTime();
+  });
+};
 export const totalChats = (state: RootState) => state.Chats.totalChats;
 export const messages = (state: RootState) =>
   [...state.Chats.messages].reverse();
 export const totalMessages = (state: RootState) => state.Chats.totalMessages;
 export const loadingGetMessages = (state: RootState) =>
   state.Chats.loadingGetMessages;
-
 export const localCurrentChat = (state: RootState) =>
   state.Chats.localCurrentChat;

@@ -4,11 +4,11 @@ import { TfiClose } from "react-icons/tfi";
 import { useSelector } from "react-redux";
 import Sidebar from "@/components/sidebar";
 
-type PropsCompnents = {
+type PropsComponent = {
   setShowPortalRoot: () => void;
 };
 
-const PortalRoot = ({ setShowPortalRoot }: PropsCompnents) => {
+const PortalRoot = ({ setShowPortalRoot }: PropsComponent) => {
   const [mounted, setMounted] = useState(false);
   const current = useSelector(currentChat);
   useEffect(() => {

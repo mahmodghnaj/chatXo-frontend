@@ -1,39 +1,44 @@
 import CurrentChat from "@/components/current-chat";
 import Main from "@/components/layouts/main";
-import { currentChat, localCurrentChat } from "@/store/features/chats";
+import {
+  currentChat,
+  localCurrentChat,
+  setFirstChatItem,
+} from "@/store/features/chats";
 import { useAddRoomMutation } from "@/store/service/chats";
 import { SendMessageType } from "@/store/types/chats";
 import { useSocketIoClient } from "@/utilities/common/hooks/use-socket-io";
 import { ReactElement, useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { NextPageWithLayout } from "./_app";
 
 const Home: NextPageWithLayout = () => {
-  const [value, setValue] = useState("");
+  const [message, setMessage] = useState("");
   const client = useSocketIoClient();
   const current = useSelector(currentChat);
   const localCurrent = useSelector(localCurrentChat);
-  const [addRoom, { isLoading: isAdding, isSuccess, data: newRoom }] =
-    useAddRoomMutation();
+  const [addRoom, { isSuccess, data: newRoom }] = useAddRoomMutation();
+  const dispatch = useDispatch();
   useEffect(() => {
     if (newRoom && isSuccess) {
       client?.send<SendMessageType>("message", {
         receiver: newRoom.user.id,
         room: newRoom.id,
-        text: value,
+        text: message,
       });
     }
-  }, [isSuccess]);
+  }, [client, isSuccess, newRoom, message]);
+
   const send = (v: string) => {
-    setValue(v);
-    if (localCurrent) {
-      addRoom({ user: localCurrent.id });
-    } else if (current) {
+    setMessage(v);
+    if (localCurrent) addRoom({ user: localCurrent.id });
+    else if (current) {
       client?.send<SendMessageType>("message", {
         receiver: current.user.id,
         room: current.id,
-        text: value,
+        text: message,
       });
+      dispatch(setFirstChatItem());
     }
   };
 
