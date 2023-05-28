@@ -1,20 +1,25 @@
 import {
   friends as friendsData,
   friendshipRequests,
+  mappingFriend as mappingFriendData,
 } from "@/store/features/profile";
 import { useGetProfileQuery } from "@/store/service/profile";
-import { ChangeEvent, useRef, useState } from "react";
+import { ChangeEvent, useEffect, useRef, useState } from "react";
 import { BsPersonFillAdd } from "react-icons/bs";
 import { FiSearch } from "react-icons/fi";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import LoadingSpinner from "../loading-spinner";
 import Friend from "./components/friend";
 import { BiGitPullRequest } from "react-icons/bi";
 import Dialog, { DialogRef } from "../dialog";
 import AddFriends from "./components/add-friends";
 import FriendshipRequests from "./components/friendship-requests";
+import { useSocketIoClient } from "@/utilities/common/hooks/use-socket-io";
+import { MappingFriendType } from "@/store/types/profile";
 
 const Friends = () => {
+  const client = useSocketIoClient();
+  const dispatch = useDispatch();
   const [dialogAddFriends, setDialogAddFriends] = useState<boolean>(false);
   const [dialogFriendshipRequests, setDialogFriendshipRequests] =
     useState<boolean>(false);
@@ -37,12 +42,20 @@ const Friends = () => {
   const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(e.target.value);
   };
+  const mappingFriend = (arg: MappingFriendType) => {
+    client?.send<MappingFriendType>("mappingFriend", arg);
+  };
+  useEffect(() => {
+    client?.subscribe("mappingFriend", (res: MappingFriendType) => {
+      dispatch(mappingFriendData(res));
+    });
+  }, []);
   return (
     <>
       {isLoading ? (
         <LoadingSpinner />
       ) : (
-        <div className="p-3 ">
+        <div className="px-3 pb-3 pt-1 ">
           <div className="flex items-center mb-4">
             <div className="relative ">
               <input
@@ -90,6 +103,7 @@ const Friends = () => {
       >
         <AddFriends
           closeDialog={() => refDialogAddFriends.current?.closeDialog()}
+          mappingFriend={(arg) => mappingFriend(arg)}
         />
       </Dialog>
       <Dialog
@@ -99,6 +113,7 @@ const Friends = () => {
       >
         <FriendshipRequests
           closeDialog={() => refFriendshipRequests.current?.closeDialog()}
+          mappingFriend={(arg) => mappingFriend(arg)}
         />
       </Dialog>
     </>

@@ -7,7 +7,6 @@ import React, {
   useRef,
   useState,
 } from "react";
-import { mergeRefs } from "react-merge-refs";
 import LoadingSpinner from "../loading-spinner";
 import { InfiniteScrollProps } from "./type";
 
@@ -23,6 +22,7 @@ const InfiniteScroll = forwardRef<any, InfiniteScrollProps>(
       total,
       focusLastItem,
       scrollBack,
+      NoDataComponent,
     },
     ref
   ) => {
@@ -110,7 +110,11 @@ const InfiniteScroll = forwardRef<any, InfiniteScrollProps>(
             <LoadingSpinner />
           </div>
         )}
-        <div ref={listRef}>{children(data)}</div>
+        {data?.length ? (
+          <div ref={listRef}>{children(data)}</div>
+        ) : (
+          <>{NoDataComponent && <NoDataComponent />}</>
+        )}
         {isFetching && !scrollBack && (
           <div>
             <LoadingSpinner />

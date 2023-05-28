@@ -1,16 +1,18 @@
 import LoadingSpinner from "@/components/loading-spinner";
 import { useSearchFriendsMutation } from "@/store/service/profile";
-import { MyProfileType } from "@/store/types/auth";
+import { MappingFriendType, MyProfileType } from "@/store/types/profile";
 import { useDebounce } from "@/utilities/common/hooks/use-debounce";
 import { useEffect, useState } from "react";
 import { FiSearch } from "react-icons/fi";
 import Friend from "./components/friend";
 import Header from "../header";
+import SvgIcon from "@/components/svg-icon";
 export type AddFriendsProps = {
   closeDialog: () => void;
+  mappingFriend: (arg: MappingFriendType) => void;
 };
 
-const AddFriends = ({ closeDialog }: AddFriendsProps) => {
+const AddFriends = ({ closeDialog, mappingFriend }: AddFriendsProps) => {
   const [query, setQuery] = useState("");
   const [searchFriends, { isLoading, data }] = useSearchFriendsMutation();
   const [listFriends, setListFriends] = useState<MyProfileType[]>([]);
@@ -52,11 +54,30 @@ const AddFriends = ({ closeDialog }: AddFriendsProps) => {
               </div>
             ) : (
               <div className="flex flex-col w-full p-4">
-                {listFriends?.map((item) => (
-                  <div key={item.id}>
-                    <Friend friend={item} />
-                  </div>
-                ))}
+                {listFriends.length !== 0 ? (
+                  listFriends?.map((item) => (
+                    <div key={item.id}>
+                      <Friend
+                        mappingFriend={(arg) => mappingFriend(arg)}
+                        friend={item}
+                      />
+                    </div>
+                  ))
+                ) : (
+                  <>
+                    {!query && (
+                      <div className="flex flex-col mt-20 items-center justify-center">
+                        <SvgIcon
+                          className="h-[180px] w-[250px] ml-20"
+                          filePath="/svg/search-icon.svg"
+                        />
+                        <div className="text-center text-2xl font-serif">
+                          Start Searching Friends
+                        </div>
+                      </div>
+                    )}
+                  </>
+                )}
               </div>
             )}
           </div>

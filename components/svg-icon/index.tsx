@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
-
 interface SvgIconProps {
   filePath: string;
+  className?: string;
 }
 
-const SvgIcon: React.FC<SvgIconProps> = ({ filePath }) => {
+const SvgIcon: React.FC<SvgIconProps> = ({ filePath, className }) => {
   const [svgContent, setSvgContent] = useState<string>("");
 
   useEffect(() => {
@@ -21,7 +21,12 @@ const SvgIcon: React.FC<SvgIconProps> = ({ filePath }) => {
     fetchSvgContent();
   }, [filePath]);
 
-  return <div dangerouslySetInnerHTML={{ __html: svgContent }} />;
+  return (
+    <div
+      className={className}
+      dangerouslySetInnerHTML={{ __html: svgContent }}
+    />
+  );
 };
 
 export default SvgIcon;

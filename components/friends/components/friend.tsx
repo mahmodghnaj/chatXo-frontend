@@ -6,7 +6,7 @@ import {
   setLocalCurrentChat,
 } from "@/store/features/chats";
 import { useCheckChatMutation } from "@/store/service/chats";
-import { Friend } from "@/store/types/auth";
+import { Friend } from "@/store/types/profile";
 import { useEffect } from "react";
 import { FiMessageSquare } from "react-icons/fi";
 import { useDispatch, useSelector } from "react-redux";

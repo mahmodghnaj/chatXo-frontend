@@ -3,12 +3,15 @@ import { useState } from "react";
 import Friends from "@/components/friends";
 import Chats from "@/components/chats";
 import InfoUser from "./components/info-user";
+import { friendshipRequests } from "@/store/features/profile";
+import { useSelector } from "react-redux";
 
 export type TabsType = {
   label: string;
   content: any;
 };
 const Sidebar = () => {
+  const friendship = useSelector(friendshipRequests);
   const [activeTab, setActiveTab] = useState(0);
   const tabs: TabsType[] = [
     { label: "Chats", content: <Chats /> },
@@ -29,12 +32,17 @@ const Sidebar = () => {
           </Link>
         </div>
         <div className="h-2" />
-        <div className="tabs px-4 tabs-boxed">
+        <div className="tabs px-4 tabs-boxed indicator w-full">
+          {!!friendship?.length && (
+            <div className="indicator-item mr-3 border-secondary rounded-badge bg-secondary text-secondary-content  h-5 text-sm leading-5 pl-[0.563rem] pr-[0.563rem]">
+              {friendship?.length}
+            </div>
+          )}
           {tabs.map((tab, index) => (
             <div
               key={index}
               onClick={() => handleClick(index)}
-              className={`tab tab-lifted tab-lg ${
+              className={`tab tab-lifted tab-lg  ${
                 index === activeTab && "tab-active"
               } `}
             >

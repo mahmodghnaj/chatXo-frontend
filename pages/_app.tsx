@@ -8,8 +8,6 @@ import { Provider } from "react-redux";
 import { store } from "@/store";
 import Cookies from "cookies";
 import { setRefreshToken } from "@/store/features/auth";
-import { ProvideSocketIoClient } from "@/utilities/common/hooks/use-socket-io";
-
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement) => ReactNode;
 };
@@ -30,9 +28,7 @@ const App = ({ Component, pageProps, ...res }: AppPropsWithLayout) => {
   );
   return (
     <>
-      <Provider store={store}>
-        <ProvideSocketIoClient> {withLayout} </ProvideSocketIoClient>
-      </Provider>
+      <Provider store={store}>{withLayout}</Provider>
     </>
   );
 };

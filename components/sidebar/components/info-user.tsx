@@ -1,13 +1,13 @@
 import { CiMenuKebab } from "react-icons/ci";
 import { AiOutlineSetting } from "react-icons/ai";
 import { FiLogOut } from "react-icons/fi";
-import { useState } from "react";
-import Dialog from "@/components/dialog";
+import { useRef, useState } from "react";
+import Dialog, { DialogRef } from "@/components/dialog";
 import Settings from "@/components/settings";
 
 const InfoUser = () => {
   const [showDialog, setShowDialog] = useState<boolean>(false);
-
+  const refDialog = useRef<DialogRef>(null);
   return (
     <>
       <div className="h-16 flex justify-center items-center border-t-success border-t-2 px-3 ">
@@ -38,8 +38,12 @@ const InfoUser = () => {
           </ul>
         </div>
       </div>
-      <Dialog open={showDialog} handler={() => setShowDialog(!showDialog)}>
-        <Settings closeDialog={() => setShowDialog(!showDialog)} />
+      <Dialog
+        ref={refDialog}
+        open={showDialog}
+        handler={() => setShowDialog(!showDialog)}
+      >
+        <Settings closeDialog={() => refDialog.current?.closeDialog()} />
       </Dialog>
     </>
   );

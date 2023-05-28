@@ -1,5 +1,5 @@
 import { RootState } from "@/store";
-import { MyProfileType } from "@/store/types/auth";
+import { MappingFriendType, MyProfileType } from "@/store/types/profile";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 export type State = {
@@ -18,23 +18,51 @@ export const profileSlice = createSlice({
     updateProfile(state, { payload }: PayloadAction<MyProfileType>) {
       state.profile = { ...state.profile, ...payload };
     },
-    acceptFriend(state, { payload }: PayloadAction<string>) {
-      const recipientObj = state.profile?.friends.find(
-        (obj) => obj.recipient.id === payload
-      );
-      if (recipientObj) recipientObj.status = 3;
-    },
-    rejectFriend(state, { payload }: PayloadAction<string>) {
-      const recipientIndex = state.profile?.friends.findIndex(
-        (obj) => obj.recipient.id === payload
-      );
-      if (recipientIndex && recipientIndex !== -1) {
-        state.profile?.friends.splice(recipientIndex, 1);
+
+    mappingFriend(state, { payload }: PayloadAction<MappingFriendType>) {
+      if (payload.type == "accept") {
+        if (payload.friendRequester) {
+          const recipientObj = state.profile?.friends.find(
+            (obj) => obj.id == payload?.friendRequester?.id
+          );
+          if (recipientObj) recipientObj.status = 3;
+        }
+        if (payload.friendRecipient) {
+          const requesterObj = state.profile?.friends.find(
+            (obj) => obj.id == payload?.friendRecipient?.id
+          );
+          if (requesterObj) requesterObj.status = 3;
+        }
+      } else if (payload.type == "reject") {
+        //
+        if (payload.friendRequester) {
+          const index = state.profile?.friends.findIndex(
+            (obj) => obj.id == payload?.friendRequester?.id
+          );
+          if (index !== undefined && index !== -1) {
+            state.profile?.friends.splice(index, 1);
+          }
+        }
+        if (payload.friendRecipient) {
+          const index = state.profile?.friends.findIndex(
+            (obj) => obj.id == payload?.friendRecipient?.id
+          );
+
+          if (index !== undefined && index !== -1) {
+            state.profile?.friends.splice(index, 1);
+          }
+        }
+        //
+      } else if (payload.type == "add") {
+        if (payload?.friendRecipient)
+          state.profile?.friends.push(payload?.friendRecipient);
+        if (payload?.friendRequester)
+          state.profile?.friends.push(payload?.friendRequester);
       }
     },
   },
 });
-export const { setProfile, updateProfile, acceptFriend, rejectFriend } =
+export const { setProfile, updateProfile, mappingFriend } =
   profileSlice.actions;
 export const profile = (state: RootState) => state.Profile.profile;
 export const friends = (state: RootState) =>

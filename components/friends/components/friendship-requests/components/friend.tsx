@@ -1,17 +1,10 @@
 import TextOverflow from "@/components/text-overflow";
-import {
-  useAcceptFriendMutation,
-  useRejectFriendMutation,
-} from "@/store/service/profile";
-import { Friend as FriendType } from "@/store/types/auth";
-
+import { Friend as FriendType, MappingFriendType } from "@/store/types/profile";
 export type ComponentProps = {
   friend: FriendType;
+  mappingFriend: (arg: MappingFriendType) => void;
 };
-const Friend = ({ friend }: ComponentProps) => {
-  const [acceptFriend, { isLoading }] = useAcceptFriendMutation();
-  const [rejectFriend, { isLoading: isLoadingReject }] =
-    useRejectFriendMutation();
+const Friend = ({ friend, mappingFriend }: ComponentProps) => {
   return (
     <>
       <div className="flex w-full items-center  justify-between mb-2">
@@ -52,19 +45,19 @@ const Friend = ({ friend }: ComponentProps) => {
         </div>
         <div className="flex p-2 space-x-2">
           <button
-            onClick={() => acceptFriend(friend.recipient.id)}
-            className={`btn btn-success btn-md capitalize ${
-              isLoading && "loading"
-            }`}
+            onClick={() =>
+              mappingFriend({ idFriend: friend.recipient.id, type: "accept" })
+            }
+            className={`btn btn-success btn-md capitalize`}
             type="button"
           >
             Accept
           </button>
           <button
-            onClick={() => rejectFriend(friend.recipient.id)}
-            className={`btn btn-error btn-md capitalize ${
-              isLoadingReject && "loading"
-            }`}
+            onClick={() =>
+              mappingFriend({ idFriend: friend.recipient.id, type: "reject" })
+            }
+            className={`btn btn-error btn-md capitalize`}
             type="button"
           >
             Reject
