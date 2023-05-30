@@ -28,6 +28,7 @@ const CurrentChat: FC<ComponentProps> = ({
     if (value) {
       if (isEmpty) return;
       send(value.trimStart());
+      refInput.current && (refInput.current.style.height = "3rem");
       setValue("");
     }
   };
@@ -40,11 +41,16 @@ const CurrentChat: FC<ComponentProps> = ({
     }
   };
   const handelMessage = (event: KeyboardEvent<HTMLTextAreaElement>) => {
-    if (event.key === "Enter" && !event.shiftKey) {
-      event.preventDefault(); // don't down line
-      refInput.current && (refInput.current.style.height = "3rem");
-      sendMessage();
-    } else increaseHeight(event);
+    if (window.innerWidth >= 640) {
+      if (event.key === "Enter" && !event.shiftKey) {
+        event.preventDefault(); // Prevent line break on Enter press
+        sendMessage();
+      } else {
+        increaseHeight(event);
+      }
+    } else {
+      increaseHeight(event);
+    }
   };
 
   const name = localCurrentChat

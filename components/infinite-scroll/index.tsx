@@ -48,10 +48,12 @@ const InfiniteScroll = forwardRef<InfiniteScrollType, InfiniteScrollProps>(
         return {
           backToBottom() {
             if (listRef.current) {
-              const lastElement =
-                listRef.current.lastElementChild?.lastElementChild;
+              const lastElement = listRef.current.querySelector(":last-child");
               if (lastElement) {
-                lastElement.scrollIntoView({ behavior: "auto" });
+                lastElement.scrollIntoView({
+                  behavior: "auto",
+                  block: "end",
+                });
               }
             }
           },
@@ -97,9 +99,9 @@ const InfiniteScroll = forwardRef<InfiniteScrollType, InfiniteScrollProps>(
         focusLastItem &&
         !isLoading
       ) {
-        const lastElement = listRef.current.lastElementChild?.lastElementChild;
+        const lastElement = listRef.current.querySelector(":last-child");
         if (lastElement) {
-          lastElement.scrollIntoView({ behavior: "auto" });
+          lastElement.scrollIntoView({ behavior: "auto", block: "end" });
         }
       }
     }, [isFetching, page, focusLastItem, isLoading]);

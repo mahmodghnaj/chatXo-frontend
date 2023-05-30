@@ -57,3 +57,55 @@ export const getLastSeen = (data: Date): string => {
     return `Last seen on ${lastSeenDate}`;
   }
 };
+export const getMessageLabel = (date: Date): string => {
+  const currentDate = new Date();
+  const formattedDate = new Date(date).toISOString().split("T")[0];
+
+  if (
+    date.toDateString() === currentDate.toDateString() ||
+    (date.getDate() === currentDate.getDate() &&
+      date.getMonth() === currentDate.getMonth() &&
+      date.getFullYear() === currentDate.getFullYear())
+  ) {
+    return "Today";
+  }
+
+  const yesterdayDate = new Date(currentDate);
+  yesterdayDate.setDate(currentDate.getDate() - 1);
+
+  if (date.toDateString() === yesterdayDate.toDateString()) {
+    return "Yesterday";
+  }
+
+  if (date >= currentDate) {
+    const days = [
+      "Sunday",
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday",
+      "Saturday",
+    ];
+    return days[date.getDay()];
+  }
+
+  return formattedDate;
+};
+export const getTime12 = (date: Date): string => {
+  let hours = date.getHours();
+  let minutes = date.getMinutes();
+  let period = "AM";
+
+  if (hours >= 12) {
+    period = "PM";
+    if (hours > 12) {
+      hours -= 12;
+    }
+  }
+
+  const formattedHours = hours.toString().padStart(2, "0");
+  const formattedMinutes = minutes.toString().padStart(2, "0");
+
+  return `${formattedHours}:${formattedMinutes} ${period}`;
+};
