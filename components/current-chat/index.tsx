@@ -22,10 +22,14 @@ const CurrentChat: FC<ComponentProps> = ({
   const refInput = useRef<HTMLTextAreaElement>(null);
   const [value, setValue] = useState("");
   const [showPortalRoot, setShowPortalRoot] = useState<boolean>(false);
+  const isEmpty = /^\s*$/.test(value);
 
   const sendMessage = () => {
-    send(value);
-    setValue("");
+    if (value) {
+      if (isEmpty) return;
+      send(value.trimStart());
+      setValue("");
+    }
   };
   const increaseHeight = (event: KeyboardEvent<HTMLTextAreaElement>) => {
     if (refInput.current) {
@@ -47,6 +51,12 @@ const CurrentChat: FC<ComponentProps> = ({
     ? localCurrentChat.firstName + " " + localCurrentChat.lastName
     : currentChat?.user.firstName + " " + currentChat?.user.lastName;
 
+  const status: "Online" | "Offline" | undefined = localCurrentChat
+    ? localCurrentChat.status
+    : currentChat?.user.status;
+  const lastSeen: Date | undefined = localCurrentChat
+    ? localCurrentChat.lastSeenAt
+    : currentChat?.user.lastSeenAt;
   return (
     <>
       <div className="flex flex-col h-full w-full relative">
@@ -58,7 +68,7 @@ const CurrentChat: FC<ComponentProps> = ({
         </button>
         {localCurrentChat && (
           <>
-            <Header name={name} />
+            <Header name={name} status={status} lastSeen={lastSeen} />
             <div className="flex-1 overflow-y-auto"></div>
             <div className="p-2 relative bg-base-300 py-2">
               <textarea
@@ -83,11 +93,11 @@ const CurrentChat: FC<ComponentProps> = ({
         )}
         {currentChat && (
           <>
-            <Header name={name} />
+            <Header name={name} status={status} lastSeen={lastSeen} />
             <Messages
               className="flex-1 overflow-y-auto"
               receiver={currentChat.user.id}
-              chatId={currentChat.id}
+              chat={currentChat}
             />
             <div className="p-2 relative bg-base-300 py-2">
               <textarea
@@ -102,7 +112,7 @@ const CurrentChat: FC<ComponentProps> = ({
               />
               <button
                 onClick={() => sendMessage()}
-                disabled={!value}
+                disabled={!value || isEmpty}
                 className="absolute bottom-7 right-6 btn btn-square btn-xs btn-ghost"
               >
                 <BsSend className="h-4 w-4" />

@@ -1,5 +1,9 @@
 import { RootState } from "@/store";
-import { MappingFriendType, MyProfileType } from "@/store/types/profile";
+import {
+  ChangeStatusUser,
+  MappingFriendType,
+  MyProfileType,
+} from "@/store/types/profile";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 export type State = {
@@ -60,9 +64,23 @@ export const profileSlice = createSlice({
           state.profile?.friends.push(payload?.friendRequester);
       }
     },
+    changeStatusFriend(state, { payload }: PayloadAction<ChangeStatusUser>) {
+      state.profile?.friends.forEach((element) => {
+        if (element.recipient.id == payload.id) {
+          element.recipient.status = payload.status;
+          if (payload.lastSeenAt)
+            element.recipient.lastSeenAt = payload.lastSeenAt;
+        }
+        if (element.requester.id == payload.id) {
+          element.requester.status = payload.status;
+          if (payload.lastSeenAt)
+            element.requester.lastSeenAt = payload.lastSeenAt;
+        }
+      });
+    },
   },
 });
-export const { setProfile, updateProfile, mappingFriend } =
+export const { setProfile, updateProfile, mappingFriend, changeStatusFriend } =
   profileSlice.actions;
 export const profile = (state: RootState) => state.Profile.profile;
 export const friends = (state: RootState) =>

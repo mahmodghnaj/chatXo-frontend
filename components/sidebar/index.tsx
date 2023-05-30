@@ -12,9 +12,9 @@ export type TabsType = {
 };
 const Sidebar = () => {
   const friendship = useSelector(friendshipRequests);
-  const [activeTab, setActiveTab] = useState(0);
+  const [activeTab, setActiveTab] = useState<number>(0);
   const tabs: TabsType[] = [
-    { label: "Chats", content: <Chats /> },
+    { label: "Chats", content: <Chats changeTap={() => setActiveTab(1)} /> },
     { label: "friends", content: <Friends /> },
   ];
   const handleClick = (tab: number) => {

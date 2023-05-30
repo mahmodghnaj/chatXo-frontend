@@ -1,13 +1,11 @@
+import { User } from "./profile";
+
 export interface ChatType {
   id: string;
-  user: {
-    id: string;
-    firstName: string;
-    lastName: string;
-    email: string;
-  };
+  user: User;
   createdAt: Date;
   updatedAt: Date;
+  lastMessage: MessageType;
 }
 
 export interface MessageType {
@@ -18,6 +16,8 @@ export interface MessageType {
   createdAt: string;
   updatedAt: string;
   id: string;
+  received: boolean;
+  seenByReceiver: boolean;
 }
 
 export interface SendMessageType {
@@ -29,4 +29,10 @@ export interface LocalCurrentChatType {
   id: string;
   firstName: string;
   lastName: string;
+  status: "Online" | "Offline";
+  lastSeenAt: Date;
+}
+export interface AddNewMessage {
+  message: MessageType;
+  idRoom: string;
 }

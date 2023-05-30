@@ -1,0 +1,13 @@
+<svg
+    viewBox="0 0 104 104"
+>
+    <circle
+        cx="52"
+        cy="52"
+        r="50"
+        fill="none"
+        stroke-linecap="round"
+        style="stroke: #21CC51;"
+        stroke-width="4"
+    ></circle>
+</svg>

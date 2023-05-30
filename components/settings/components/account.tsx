@@ -69,7 +69,7 @@ const Account: React.FC = () => {
         onSubmit={handleSubmit(onSubmit)}
         className="space-y-4 flex flex-col w-full max-w-xl mx-auto"
       >
-        <div className="flex justify-between items-center">
+        <div className="md:flex justify-between items-center">
           <div className="flex flex-col">
             <p className="text-md font-extralight my-2">
               Enter Your First Name

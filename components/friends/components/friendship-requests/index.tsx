@@ -38,7 +38,7 @@ const FriendshipRequests = ({
               className="h-[180px] w-[250px] "
               filePath="/svg/no-data.svg"
             />
-            <div className="text-center text-2xl font-serif">
+            <div className="text-center text-lg md:text-2xl font-serif">
               Not Have Friendship Requests
             </div>
           </div>

@@ -29,7 +29,7 @@ const AddFriends = ({ closeDialog, mappingFriend }: AddFriendsProps) => {
   }, [searchQuery]);
   return (
     <>
-      <div className="md:w-[700px]  bg-base-300 rounded-lg">
+      <div className="md:w-[700px] w-[300px] sm:w-[500px]  bg-base-300 rounded-lg">
         <Header title="Add Friends" closeDialog={closeDialog} />
         <div className="divider"></div>
         <div className="p-4">
@@ -68,7 +68,7 @@ const AddFriends = ({ closeDialog, mappingFriend }: AddFriendsProps) => {
                     {!query && (
                       <div className="flex flex-col mt-20 items-center justify-center">
                         <SvgIcon
-                          className="h-[180px] w-[250px] ml-20"
+                          className="h-[150px] w-[150px] md:h-[180px] md:w-[250px] md:ml-20"
                           filePath="/svg/search-icon.svg"
                         />
                         <div className="text-center text-2xl font-serif">

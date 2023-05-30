@@ -13,5 +13,9 @@ export interface InfiniteScrollProps {
   queryParams?: string;
   focusLastItem?: boolean;
   scrollBack?: boolean;
-  NoDataComponent?: any;
+  NoDataComponent?: JSX.Element;
+}
+
+export interface InfiniteScrollType {
+  backToBottom: () => void;
 }

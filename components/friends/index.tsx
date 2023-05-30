@@ -16,6 +16,7 @@ import AddFriends from "./components/add-friends";
 import FriendshipRequests from "./components/friendship-requests";
 import { useSocketIoClient } from "@/utilities/common/hooks/use-socket-io";
 import { MappingFriendType } from "@/store/types/profile";
+import SvgIcon from "../svg-icon";
 
 const Friends = () => {
   const client = useSocketIoClient();
@@ -55,7 +56,7 @@ const Friends = () => {
       {isLoading ? (
         <LoadingSpinner />
       ) : (
-        <div className="px-3 pb-3 pt-1 ">
+        <div className="px-3 pb-3 pt-3 ">
           <div className="flex items-center mb-4">
             <div className="relative ">
               <input
@@ -89,11 +90,31 @@ const Friends = () => {
               )}
             </div>
           </div>
-          {filteredFriends?.map((item) => (
-            <div key={item.id}>
-              <Friend friend={item} />
-            </div>
-          ))}
+          <>
+            {!!friendsList?.length ? (
+              filteredFriends?.map((item) => (
+                <div key={item.id}>
+                  <Friend friend={item} />
+                </div>
+              ))
+            ) : (
+              <div className="flex h-full w-full flex-col justify-center items-center">
+                <SvgIcon
+                  className="h-24 w-24 mt-8"
+                  filePath="/svg/add-friend.svg"
+                />
+                <div className="text-lg mt-3 font-mono text-accent-content">
+                  Start Add New&nbsp;
+                  <span
+                    className="text-accent underline cursor-pointer"
+                    onClick={() => setDialogAddFriends(true)}
+                  >
+                    Friends
+                  </span>
+                </div>
+              </div>
+            )}
+          </>
         </div>
       )}
       <Dialog

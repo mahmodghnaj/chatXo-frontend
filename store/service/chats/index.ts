@@ -36,7 +36,7 @@ export const chatsApi = baseApi.injectEndpoints({
       }),
       getMessage: builder.query<ResponsivePagination<MessageType>, QueryArgs>({
         query: (args) => ({
-          url: `/room/${args.id}`,
+          url: `/room/message/${args.id}`,
           params: { ...args.params },
           onSuccess: async (dispatch, data) => {
             const res = data as ResponsivePagination<MessageType>;
@@ -83,6 +83,16 @@ export const chatsApi = baseApi.injectEndpoints({
           },
         }),
       }),
+      getChat: builder.mutation<ChatType, string>({
+        query: (id) => ({
+          url: `room/${id}`,
+          method: "get",
+          onSuccess: async (dispatch, data) => {
+            const res = data as ChatType;
+            dispatch(addNewChat(res));
+          },
+        }),
+      }),
     };
   },
 });
@@ -92,4 +102,5 @@ export const {
   useGetMessageQuery,
   useCheckChatMutation,
   useAddRoomMutation,
+  useGetChatMutation,
 } = chatsApi;

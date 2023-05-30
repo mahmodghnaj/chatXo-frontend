@@ -12,7 +12,7 @@ const Settings = ({ closeDialog }: SettingsProps) => {
 
   return (
     <>
-      <div className="md:w-[700px]  bg-base-300 rounded-lg ">
+      <div className="md:w-[700px] w-[400px] bg-base-300 rounded-lg ">
         <Header closeDialog={closeDialog} />
         <div className="divider"></div>
         <div className="tabs p-4 ">

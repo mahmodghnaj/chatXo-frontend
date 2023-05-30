@@ -20,7 +20,6 @@ export interface DialogRef {
 const Dialog = forwardRef<DialogRef, DialogProps>(
   ({ open, handler, children }, ref) => {
     const [mounted, setMounted] = useState(false);
-
     useEffect(() => {
       if (open) {
         setMounted(true);

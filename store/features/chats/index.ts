@@ -1,10 +1,12 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "@/store";
 import {
+  AddNewMessage,
   ChatType,
   LocalCurrentChatType,
   MessageType,
 } from "@/store/types/chats";
+import { ChangeStatusUser } from "@/store/types/profile";
 
 interface State {
   currentChat: ChatType | null;
@@ -31,6 +33,7 @@ export const chatsSlice = createSlice({
   initialState,
   reducers: {
     setCurrentChat: (state, { payload }: PayloadAction<ChatType>) => {
+      state.localCurrentChat = null;
       state.currentChat = payload;
     },
     setChats: (state, { payload }: PayloadAction<ChatType[]>) => {
@@ -58,12 +61,19 @@ export const chatsSlice = createSlice({
     setLoadingGetMessages: (state, { payload }: PayloadAction<boolean>) => {
       state.loadingGetMessages = payload;
     },
-    addNewMessage: (state, { payload }: PayloadAction<MessageType>) => {
-      if (state.currentChat?.id === payload.room) {
-        state.messages.unshift(payload);
+    addNewMessage: (state, { payload }: PayloadAction<AddNewMessage>) => {
+      if (state.currentChat?.id === payload.idRoom) {
+        state.messages.unshift(payload.message);
         if (state.totalMessages) {
           state.totalMessages += 1;
         }
+      }
+      const index = state.chats.findIndex((item) => item.id == payload.idRoom);
+      if (index !== -1) {
+        const topChat = state.chats[index];
+        topChat.lastMessage = payload.message;
+        state.chats.splice(index, 1);
+        state.chats.unshift(topChat);
       }
     },
     setLocalCurrentChat: (
@@ -75,13 +85,25 @@ export const chatsSlice = createSlice({
     addNewChat: (state, { payload }: PayloadAction<ChatType>) => {
       state.chats.unshift(payload);
     },
-    setFirstChatItem(state) {
-      const index = state.chats.findIndex(
-        (item) => item.id === state.currentChat?.id
-      );
-      if (index !== -1 && state.currentChat) {
-        state.chats.splice(index, 1);
-        state.chats.unshift(state.currentChat);
+    changeStatusUser(state, { payload }: PayloadAction<ChangeStatusUser>) {
+      const chat = state.chats.find((item) => item.user.id == payload.id);
+      if (state?.currentChat?.user.id == payload.id) {
+        state.currentChat.user.status = payload.status;
+        if (payload.lastSeenAt) {
+          state.currentChat.user.lastSeenAt = payload.lastSeenAt;
+        }
+        if (payload.status == "Offline") {
+          state.currentChat.lastMessage.received = false;
+          if (chat) chat.lastMessage.received = false;
+        } else {
+          state.currentChat.lastMessage.received = true;
+          if (chat) chat.lastMessage.received = true;
+        }
+      }
+      if (chat) {
+        chat.user.status = payload.status;
+
+        if (payload.lastSeenAt) chat.user.lastSeenAt = payload.lastSeenAt;
       }
     },
   },
@@ -99,7 +121,7 @@ export const {
   addNewMessage,
   setLocalCurrentChat,
   addNewChat,
-  setFirstChatItem,
+  changeStatusUser,
 } = chatsSlice.actions;
 
 export const currentChat = (state: RootState) => state.Chats.currentChat;

@@ -1,16 +1,15 @@
+export interface User {
+  firstName: string;
+  lastName: string;
+  email: string;
+  id: string;
+  lastSeenAt: Date;
+  status: "Online" | "Offline";
+}
+
 export interface Friend {
-  recipient: {
-    firstName: string;
-    lastName: string;
-    email: string;
-    id: string;
-  };
-  requester: {
-    firstName: string;
-    lastName: string;
-    email: string;
-    id: string;
-  };
+  recipient: User;
+  requester: User;
   createdAt: Date;
   status: 0 | 1 | 2 | 3;
   // 0, 'add friend',
@@ -28,6 +27,8 @@ export interface MyProfileType {
   email: string;
   createdAt: Date;
   friends: Friend[];
+  status: "Online" | "Offline";
+  lastSeenAt: Date;
 }
 export interface UpdateProfile {
   firstName?: string;
@@ -39,4 +40,9 @@ export interface MappingFriendType {
   type: "add" | "accept" | "reject";
   friendRequester?: Friend;
   friendRecipient?: Friend;
+}
+export interface ChangeStatusUser {
+  id: string;
+  status: "Online" | "Offline";
+  lastSeenAt?: Date;
 }

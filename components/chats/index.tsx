@@ -4,11 +4,34 @@ import { ChatType } from "@/store/types/chats";
 import { FC } from "react";
 import { useSelector } from "react-redux";
 import InfiniteScroll from "../infinite-scroll";
+import SvgIcon from "../svg-icon";
 import Chat from "./components/chat";
-const Chats = () => {
+
+type ComponentsProps = {
+  changeTap: () => void;
+};
+
+const Chats: FC<ComponentsProps> = ({ changeTap }) => {
   const allChats = useSelector(chats);
   const total = useSelector(totalChats);
-
+  const NoData: FC = () => {
+    return (
+      <>
+        <div className="flex flex-col w-full h-full items-center justify-center">
+          <SvgIcon className="h-16 w-16" filePath="/svg/add-chat.svg" />
+          <div className="text-lg mt-3 font-mono text-accent-content">
+            Start Chat With&nbsp;
+            <span
+              className="text-accent underline cursor-pointer"
+              onClick={changeTap}
+            >
+              Friends
+            </span>
+          </div>
+        </div>
+      </>
+    );
+  };
   return (
     <>
       <InfiniteScroll
@@ -16,6 +39,7 @@ const Chats = () => {
         fetch={useGetChatsQuery}
         data={allChats}
         total={total}
+        NoDataComponent={<NoData />}
       >
         {(data) =>
           data.map((item: ChatType) => {

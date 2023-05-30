@@ -8,9 +8,9 @@ import React, {
   useState,
 } from "react";
 import LoadingSpinner from "../loading-spinner";
-import { InfiniteScrollProps } from "./type";
+import { InfiniteScrollType, InfiniteScrollProps } from "./type";
 
-const InfiniteScroll = forwardRef<any, InfiniteScrollProps>(
+const InfiniteScroll = forwardRef<InfiniteScrollType, InfiniteScrollProps>(
   (
     {
       fetch,
@@ -113,7 +113,7 @@ const InfiniteScroll = forwardRef<any, InfiniteScrollProps>(
         {data?.length ? (
           <div ref={listRef}>{children(data)}</div>
         ) : (
-          <>{NoDataComponent && <NoDataComponent />}</>
+          <>{NoDataComponent! && !isFetching && NoDataComponent}</>
         )}
         {isFetching && !scrollBack && (
           <div>
