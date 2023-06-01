@@ -1,7 +1,8 @@
 import { LocalCurrentChatType, ChatType } from "@/store/types/chats";
 import { FC, useRef } from "react";
 import { KeyboardEvent, useState } from "react";
-import { BsSend } from "react-icons/bs";
+import { AiOutlineSend } from "react-icons/ai";
+import { IoSendSharp } from "react-icons/io5";
 import { FcMenu } from "react-icons/fc";
 import Portal from "../portal";
 import PortalRoot from "../portal-root";
@@ -89,10 +90,10 @@ const CurrentChat: FC<ComponentProps> = ({
               />
               <button
                 onClick={() => sendMessage()}
-                disabled={!value}
-                className="absolute bottom-7 right-6 btn btn-square btn-xs btn-ghost"
+                disabled={!value || isEmpty}
+                className="absolute bottom-6 right-3 btn btn-square btn-sm btn-success"
               >
-                <BsSend className="h-4 w-4" />
+                <IoSendSharp className="h-7 w-7 " />
               </button>
             </div>
           </>
@@ -119,9 +120,9 @@ const CurrentChat: FC<ComponentProps> = ({
               <button
                 onClick={() => sendMessage()}
                 disabled={!value || isEmpty}
-                className="absolute bottom-7 right-6 btn btn-square btn-xs btn-ghost"
+                className="absolute bottom-6 right-3 btn btn-square btn-sm btn-success"
               >
-                <BsSend className="h-4 w-4" />
+                <IoSendSharp className="h-7 w-7 " />
               </button>
             </div>
           </>

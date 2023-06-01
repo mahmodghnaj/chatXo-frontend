@@ -32,35 +32,30 @@ const InfiniteScroll = forwardRef<InfiniteScrollType, InfiniteScrollProps>(
     const { isFetching, isLoading } = fetch(
       {
         id: queryParams,
-        params: {
-          ...defaultPagination,
-          page: page,
-          ...query,
-        },
+        params: { ...defaultPagination, page: page, ...query },
       },
       {
         skip: !!(total && data.length >= total),
       }
     );
+
     useImperativeHandle(
       ref,
       () => {
         return {
           backToBottom() {
             if (listRef.current) {
-              const lastElement = listRef.current.querySelector(":last-child");
-              if (lastElement) {
-                lastElement.scrollIntoView({
-                  behavior: "auto",
-                  block: "end",
-                });
-              }
+              listRef.current.scrollIntoView({
+                behavior: "smooth",
+                block: "end",
+              });
             }
           },
         };
       },
       []
     );
+
     useEffect(() => {
       const parentElem = parentRef.current;
       const handleScroll = () => {
@@ -80,12 +75,15 @@ const InfiniteScroll = forwardRef<InfiniteScrollType, InfiniteScrollProps>(
             scrollTop + clientHeight + 5 >= scrollHeight &&
             !isFetching &&
             !isLoading)
-        )
+        ) {
           setPage(page + 1);
+        }
       };
+
       if (parentElem) {
         parentElem.addEventListener("scroll", handleScroll);
       }
+
       return () => {
         if (parentElem) parentElem.removeEventListener("scroll", handleScroll);
       };
@@ -99,12 +97,13 @@ const InfiniteScroll = forwardRef<InfiniteScrollType, InfiniteScrollProps>(
         focusLastItem &&
         !isLoading
       ) {
-        const lastElement = listRef.current.querySelector(":last-child");
-        if (lastElement) {
-          lastElement.scrollIntoView({ behavior: "auto", block: "end" });
-        }
+        listRef.current.scrollIntoView({
+          behavior: "auto",
+          block: "end",
+        });
       }
     }, [isFetching, page, focusLastItem, isLoading]);
+
     return (
       <div ref={parentRef} className={classNames(`${className} flex flex-col`)}>
         {isFetching && scrollBack && (

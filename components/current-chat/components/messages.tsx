@@ -62,7 +62,7 @@ const Messages = ({ chat, className, receiver }: PropsComponents) => {
             <>
               {groupMessagesByDay(data).map(([date, messages], index) => (
                 <div key={index}>
-                  <div className="px-3 py-2">
+                  <div className="px-3 py-4">
                     <div className=" flex items-center justify-center">
                       <div className="bg-base-200 p-2 rounded-lg text-base-content">
                         {date}
