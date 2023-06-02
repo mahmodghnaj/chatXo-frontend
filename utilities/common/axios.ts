@@ -19,7 +19,6 @@ axios.interceptors.request.use(
 
 axios.interceptors.response.use(
   async (response: AxiosResponse) => {
-    await sleep(2000);
     return response;
   },
   async (error: any) => {
@@ -45,9 +44,4 @@ const refreshAccessToken = async (): Promise<any> => {
     withCredentials: true,
   });
 };
-
-function sleep(ms: number) {
-  return new Promise((resolve) => setTimeout(resolve, ms));
-}
-
 export default axios;
