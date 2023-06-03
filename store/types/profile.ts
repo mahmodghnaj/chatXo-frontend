@@ -29,6 +29,8 @@ export interface MyProfileType {
   friends: Friend[];
   status: "Online" | "Offline";
   lastSeenAt: Date;
+  socialId?: string;
+  socialType?: string;
 }
 export interface UpdateProfile {
   firstName?: string;

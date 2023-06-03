@@ -4,7 +4,6 @@ import { FiLogOut } from "react-icons/fi";
 import { useRef, useState } from "react";
 import Dialog, { DialogRef } from "@/components/dialog";
 import Settings from "@/components/settings";
-
 const InfoUser = () => {
   const [showDialog, setShowDialog] = useState<boolean>(false);
   const refDialog = useRef<DialogRef>(null);

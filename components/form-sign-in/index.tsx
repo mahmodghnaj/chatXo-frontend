@@ -35,9 +35,13 @@ const FormSignIn = () => {
   useEffect(() => {
     if (isSuccess) router.push("/");
   }, [isSuccess]);
+  const loginSocial = (type: string) => {
+    const url = `${process.env.NEXT_PUBLIC_BASE_URL}auth/${type}`;
+    window.location.href = url;
+  };
   return (
     <>
-      <div className="bg-base-200 w-auto sm:w-96 rounded-3xl p-8">
+      <div className="bg-base-200 w-auto sm:w-96  rounded-3xl p-8">
         <div className="flex justify-between items-center">
           <p className="font-thin ">Welcome to chat App</p>
           <p className=" font-serif text-xs">
@@ -88,15 +92,19 @@ const FormSignIn = () => {
           </button>
         </form>
         <div className="my-5 flex justify-center">OR</div>
-        <div className="flex flex-nowrap space-x-2">
-          <button className="btn btn-sm gap-2  btn-secondary capitalize">
+        <div className="flex flex-nowrap space-x-2 items-center justify-center">
+          <button
+            onClick={() => loginSocial("google")}
+            className="btn btn-sm gap-2  btn-secondary capitalize"
+          >
             <FcGoogle size="20px" />
             Sign in with Google
           </button>
-          <button className="btn  btn-square btn-sm">
-            <BsFacebook className="text-blue-400" size="20px" />
-          </button>
-          <button className="btn btn-square btn-sm">
+
+          <button
+            onClick={() => loginSocial("github")}
+            className="btn btn-square btn-sm"
+          >
             <AiOutlineGithub size="20px" />
           </button>
         </div>

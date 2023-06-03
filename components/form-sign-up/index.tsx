@@ -37,7 +37,7 @@ const FormSignUp = () => {
   }, [isSuccess, router]);
   return (
     <>
-      <div className="bg-base-200 z-50 w-auto sm:w-96 rounded-3xl p-8">
+      <div className="bg-base-200  w-auto sm:w-96 rounded-3xl p-8">
         <div className="flex justify-between items-center">
           <p className="font-thin ">Welcome to chat App</p>
           <p className=" font-serif text-xs">

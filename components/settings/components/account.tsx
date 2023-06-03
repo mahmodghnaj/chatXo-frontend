@@ -99,20 +99,22 @@ const Account: React.FC = () => {
             )}
           </div>
         </div>
-        <div className="flex flex-col">
-          <p className="text-md font-extralight my-2">Enter Your Email</p>
+        {!info?.socialId && (
+          <div className="flex flex-col">
+            <p className="text-md font-extralight my-2">Enter Your Email</p>
 
-          <input
-            type="email"
-            id="email"
-            placeholder="Email"
-            {...register("email")}
-            className={`input input-primary input-md w-full`}
-          />
-          {errors.email && (
-            <span className="text-error">{errors.email.message}</span>
-          )}
-        </div>
+            <input
+              type="email"
+              id="email"
+              placeholder="Email"
+              {...register("email")}
+              className={`input input-primary input-md w-full`}
+            />
+            {errors.email && (
+              <span className="text-error">{errors.email.message}</span>
+            )}
+          </div>
+        )}
         <button
           type="submit"
           className={`btn btn-primary capitalize ${isUpdating && "loading"}`}
