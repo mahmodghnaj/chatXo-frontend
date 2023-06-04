@@ -1,5 +1,6 @@
-export const getChatDate = (timestamp: Date): string => {
+export const getChatDate = (t: Date): string => {
   const currentTime: Date = new Date();
+  const timestamp: number = new Date(t).getTime();
   const currentTimestamp: number = currentTime.getTime() / 1000;
   const timeDifference: number = currentTimestamp - timestamp;
 
