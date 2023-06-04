@@ -53,6 +53,7 @@ export const chatsSlice = createSlice({
     },
     resetChats: (state) => {
       state.chats = [];
+      state.totalChats = undefined;
     },
     resetMessages: (state) => {
       state.messages = [];
@@ -84,26 +85,42 @@ export const chatsSlice = createSlice({
     },
     addNewChat: (state, { payload }: PayloadAction<ChatType>) => {
       state.chats.unshift(payload);
+      if (state.totalChats) state.totalChats += 1;
     },
     changeStatusUser(state, { payload }: PayloadAction<ChangeStatusUser>) {
       const chat = state.chats.find((item) => item.user.id == payload.id);
+
       if (state?.currentChat?.user.id == payload.id) {
         state.currentChat.user.status = payload.status;
+
         if (payload.lastSeenAt) {
           state.currentChat.user.lastSeenAt = payload.lastSeenAt;
         }
-        if (payload.status == "Offline") {
-          state.currentChat.lastMessage.received = false;
-          if (chat) chat.lastMessage.received = false;
-        } else {
+        if (payload.status == "Online") {
+          state.messages.forEach((element) => {
+            element.received = true;
+          });
           state.currentChat.lastMessage.received = true;
           if (chat) chat.lastMessage.received = true;
+        } else {
+          state.currentChat.lastMessage.received = false;
         }
       }
       if (chat) {
         chat.user.status = payload.status;
-
         if (payload.lastSeenAt) chat.user.lastSeenAt = payload.lastSeenAt;
+      }
+    },
+    deleteChat(state, { payload }: PayloadAction<string>) {
+      const index = state.chats.findIndex((item) => item.id == payload);
+      if (index !== -1) {
+        state.chats.splice(index, 1);
+        if (state.totalChats) state.totalChats -= 1;
+      }
+      if (state.currentChat?.id == payload) {
+        state.currentChat = null;
+        state.messages = [];
+        state.totalMessages = undefined;
       }
     },
   },
@@ -122,6 +139,7 @@ export const {
   setLocalCurrentChat,
   addNewChat,
   changeStatusUser,
+  deleteChat,
 } = chatsSlice.actions;
 
 export const currentChat = (state: RootState) => state.Chats.currentChat;

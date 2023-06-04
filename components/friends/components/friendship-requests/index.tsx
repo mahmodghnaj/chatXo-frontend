@@ -2,7 +2,8 @@ import { friendshipRequests } from "@/store/features/profile";
 import { useSelector } from "react-redux";
 import Friend from "./components/friend";
 import Header from "../header";
-import SvgIcon from "@/components/svg-icon";
+import SvgIcon from "../../../../public/svg/no-data.svg";
+
 import { MappingFriendType } from "@/store/types/profile";
 export type AddFriendsProps = {
   closeDialog: () => void;
@@ -34,10 +35,7 @@ const FriendshipRequests = ({
           </div>
         ) : (
           <div className="h-[400px] flex flex-col justify-center items-center">
-            <SvgIcon
-              className="h-[180px] w-[250px] "
-              filePath="/svg/no-data.svg"
-            />
+            <SvgIcon className="h-[180px] w-[250px] " />
             <div className="text-center text-lg md:text-2xl font-serif">
               Not Have Friendship Requests
             </div>

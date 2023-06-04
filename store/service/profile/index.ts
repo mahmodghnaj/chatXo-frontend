@@ -4,15 +4,6 @@ import { baseApi } from "..";
 export const chatsApi = baseApi.injectEndpoints({
   endpoints: (builder) => {
     return {
-      getProfile: builder.query<MyProfileType, void>({
-        query: () => ({
-          url: `/auth/me`,
-          onSuccess: async (dispatch, data) => {
-            const res = data as MyProfileType;
-            dispatch(setProfile(res));
-          },
-        }),
-      }),
       updateProfile: builder.mutation<MyProfileType, UpdateProfile>({
         query: (arg) => ({
           method: "patch",
@@ -37,8 +28,4 @@ export const chatsApi = baseApi.injectEndpoints({
   },
 });
 
-export const {
-  useGetProfileQuery,
-  useUpdateProfileMutation,
-  useSearchFriendsMutation,
-} = chatsApi;
+export const { useUpdateProfileMutation, useSearchFriendsMutation } = chatsApi;

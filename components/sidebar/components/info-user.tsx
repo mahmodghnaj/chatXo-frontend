@@ -4,16 +4,22 @@ import { FiLogOut } from "react-icons/fi";
 import { useRef, useState } from "react";
 import Dialog, { DialogRef } from "@/components/dialog";
 import Settings from "@/components/settings";
+import { useSelector } from "react-redux";
+import { profile } from "@/store/features/profile";
 const InfoUser = () => {
   const [showDialog, setShowDialog] = useState<boolean>(false);
   const refDialog = useRef<DialogRef>(null);
+  const infoProfile = useSelector(profile);
   return (
     <>
       <div className="h-16 flex justify-center items-center border-t-success border-t-2 px-3 ">
         <div className="dropdown dropdown-top  w-full h-8 ">
           <label tabIndex={0} className="btn w-full">
-            <div className="flex w-full justify-between">
-              <div> Mahmod Ghnaj</div>
+            <div className="flex w-full  justify-between">
+              <div className="overflow-hidden capitalize whitespace-nowrap text-ellipsis">
+                {infoProfile &&
+                  infoProfile.firstName + " " + infoProfile?.lastName}
+              </div>
               <div>
                 <CiMenuKebab className="h-4 w-4" />
               </div>

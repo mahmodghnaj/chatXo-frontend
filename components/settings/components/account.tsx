@@ -4,10 +4,7 @@ import { z } from "zod";
 import { useSelector } from "react-redux";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { profile } from "@/store/features/profile";
-import {
-  useGetProfileQuery,
-  useUpdateProfileMutation,
-} from "@/store/service/profile";
+import { useUpdateProfileMutation } from "@/store/service/profile";
 import LoadingSpinner from "@/components/loading-spinner";
 
 const schema = z.object({
@@ -20,9 +17,6 @@ type FormData = z.infer<typeof schema>;
 
 const Account: React.FC = () => {
   const info = useSelector(profile);
-  const { isLoading, isFetching } = useGetProfileQuery(undefined, {
-    skip: !!info,
-  });
   const [updateProfile, { isLoading: isUpdating, isSuccess }] =
     useUpdateProfileMutation();
 
@@ -49,7 +43,7 @@ const Account: React.FC = () => {
   const onSubmit = (data: FormData) => {
     if (
       data.firstName === info?.firstName &&
-      data.lastName === info?.lastName &&
+      data?.lastName === info?.lastName &&
       data.email === info?.email
     ) {
       // No changes in inputs, return early
@@ -57,12 +51,6 @@ const Account: React.FC = () => {
     }
     updateProfile(data);
   };
-  if (isLoading)
-    return (
-      <>
-        <LoadingSpinner />
-      </>
-    );
   return (
     <>
       <form

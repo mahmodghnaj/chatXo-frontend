@@ -1,3 +1,5 @@
+import { MyProfileType } from "./profile";
+
 export interface SignInUser {
   email: string;
   password: string;
@@ -17,4 +19,9 @@ export interface SignUp {
   lastName: string;
   email: string;
   password: string;
+}
+export interface Session {
+  user: MyProfileType;
+  accessToken: string;
+  refreshToken: string;
 }

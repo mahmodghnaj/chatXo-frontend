@@ -18,7 +18,6 @@ export const authSlice = createSlice({
   initialState,
   reducers: {
     setAccessToken(state, { payload }: PayloadAction<string>) {
-      Cookies.set("accessToken", payload);
       state.accessToken = payload;
     },
     setRefreshToken(state, { payload }: PayloadAction<string>) {

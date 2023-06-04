@@ -1,11 +1,14 @@
 import { ReactElement } from "react";
 import Sidebar from "@/components/sidebar";
 import { ProvideSocketIoClient } from "@/utilities/common/hooks/use-socket-io";
+import { useGetSessionQuery } from "@/store/service/auth";
 
 type componentProps = {
   children: ReactElement;
 };
 const Main = ({ children }: componentProps) => {
+  const { isSuccess } = useGetSessionQuery();
+  if (!isSuccess) return <></>;
   return (
     <>
       <ProvideSocketIoClient>

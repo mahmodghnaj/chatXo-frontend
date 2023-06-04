@@ -1,3 +1,4 @@
+import { store } from "@/store";
 import Cookies from "js-cookie";
 import React, { useContext, createContext, useRef } from "react";
 import SocketIoClient from "../socketIo-client";
@@ -39,7 +40,7 @@ function useProvideSocketIoClient() {
   const config = {
     url:
       process.env.NEXT_PUBLIC_BASE_URL?.toString().replace("api/", "") ?? "/",
-    token: Cookies.get("accessToken"),
+    token: store.getState().Auth.accessToken || "",
   };
   if (typeof window === "undefined") return null;
   if (!clientRef.current) {

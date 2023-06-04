@@ -14,7 +14,7 @@ const Friend = ({ friend, mappingFriend }: ComponentProps) => {
           <div className="ml-2 max-w-[5rem] sm:max-w-[16rem]   md:max-w-[18rem] text-lg font-extrabold">
             <TextOverflow
               text={
-                friend.recipient.firstName + " " + friend.recipient.lastName
+                friend.recipient.firstName + " " + friend.recipient?.lastName
               }
             />
           </div>

@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import { FiSearch } from "react-icons/fi";
 import Friend from "./components/friend";
 import Header from "../header";
-import SvgIcon from "@/components/svg-icon";
+import SvgIcon from "../../../../public/svg/search-icon.svg";
 export type AddFriendsProps = {
   closeDialog: () => void;
   mappingFriend: (arg: MappingFriendType) => void;
@@ -67,10 +67,7 @@ const AddFriends = ({ closeDialog, mappingFriend }: AddFriendsProps) => {
                   <>
                     {!query && (
                       <div className="flex flex-col mt-20 items-center justify-center">
-                        <SvgIcon
-                          className="h-[150px] w-[150px] md:h-[180px] md:w-[250px] md:ml-20"
-                          filePath="/svg/search-icon.svg"
-                        />
+                        <SvgIcon className="h-[150px] w-[150px] md:h-[180px] md:w-[250px] md:ml-20" />
                         <div className="text-center text-2xl font-serif">
                           Start Searching Friends
                         </div>

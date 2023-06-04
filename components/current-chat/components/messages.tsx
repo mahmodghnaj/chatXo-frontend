@@ -1,6 +1,6 @@
 import InfiniteScroll from "@/components/infinite-scroll";
 import { InfiniteScrollType } from "@/components/infinite-scroll/type";
-import SvgIcon from "@/components/svg-icon";
+
 import { messages, resetMessages, totalMessages } from "@/store/features/chats";
 import { useGetMessageQuery } from "@/store/service/chats";
 import { ChatType, MessageType } from "@/store/types/chats";
@@ -8,6 +8,8 @@ import { getMessageLabel, getTime12 } from "@/utilities/common/date";
 import classNames from "classnames";
 import { useEffect, useLayoutEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import SvgIconReceived from "../../../public/svg/received.svg";
+import SvgIconNoReceived from "../../../public/svg/no-received.svg";
 
 type PropsComponents = {
   chat: ChatType;
@@ -82,13 +84,12 @@ const Messages = ({ chat, className, receiver }: PropsComponents) => {
                             <div>{getTime12(new Date(item.createdAt))} </div>
                             {receiver == item.receiver && (
                               <div className="ml-1">
-                                <SvgIcon
-                                  filePath={
-                                    item.received || chat.lastMessage.received
-                                      ? "/svg/received.svg"
-                                      : "/svg/no-received.svg"
-                                  }
-                                />
+                                {item.received ||
+                                chat?.lastMessage?.received ? (
+                                  <SvgIconReceived />
+                                ) : (
+                                  <SvgIconNoReceived />
+                                )}
                               </div>
                             )}
                           </div>

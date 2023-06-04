@@ -56,7 +56,7 @@ const CurrentChat: FC<ComponentProps> = ({
 
   const name = localCurrentChat
     ? localCurrentChat.firstName + " " + localCurrentChat.lastName
-    : currentChat?.user.firstName + " " + currentChat?.user.lastName;
+    : currentChat?.user.firstName + " " + currentChat?.user?.lastName;
 
   const status: "Online" | "Offline" | undefined = localCurrentChat
     ? localCurrentChat.status
@@ -120,9 +120,9 @@ const CurrentChat: FC<ComponentProps> = ({
               <button
                 onClick={() => sendMessage()}
                 disabled={!value || isEmpty}
-                className="absolute bottom-6 right-3 btn btn-square btn-sm btn-success"
+                className="absolute bottom-6 right-3 btn btn-square btn-sm min-h-[1px] h-[30px]  w-[40px] btn-success"
               >
-                <IoSendSharp className="h-7 w-7 " />
+                <IoSendSharp className="h-7 w-7" />
               </button>
             </div>
           </>

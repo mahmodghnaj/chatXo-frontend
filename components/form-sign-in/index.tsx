@@ -34,7 +34,7 @@ const FormSignIn = () => {
   };
   useEffect(() => {
     if (isSuccess) router.push("/");
-  }, [isSuccess]);
+  }, [isSuccess, router]);
   const loginSocial = (type: string) => {
     const url = `${process.env.NEXT_PUBLIC_BASE_URL}auth/${type}`;
     window.location.href = url;

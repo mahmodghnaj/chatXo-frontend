@@ -12,6 +12,8 @@ import { useAddRoomMutation, useGetChatMutation } from "@/store/service/chats";
 import { AddNewMessage, SendMessageType } from "@/store/types/chats";
 import { ChangeStatusUser } from "@/store/types/profile";
 import { useSocketIoClient } from "@/utilities/common/hooks/use-socket-io";
+import { GetServerSideProps } from "next";
+import Link from "next/link";
 import { ReactElement, useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { NextPageWithLayout } from "./_app";
@@ -80,12 +82,20 @@ const Home: NextPageWithLayout = () => {
     }
   }, [newMessage]);
   return (
-    <CurrentChat
-      currentChat={current}
-      localCurrentChat={localCurrent}
-      send={send}
-    />
+    <>
+      <CurrentChat
+        currentChat={current}
+        localCurrentChat={localCurrent}
+        send={send}
+      />
+    </>
   );
+};
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  return {
+    props: {}, // will be passed to the page component as props
+  };
 };
 
 Home.getLayout = function getLayout(page: ReactElement) {

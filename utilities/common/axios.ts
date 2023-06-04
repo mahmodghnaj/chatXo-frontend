@@ -1,11 +1,12 @@
+import { store } from "@/store";
+import { setAccessToken, setRefreshToken } from "@/store/features/auth";
 import Axios, { AxiosResponse } from "axios";
-import Cookies from "js-cookie";
 const API_BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 const axios = Axios.create({ baseURL: API_BASE_URL, withCredentials: true });
 
 axios.interceptors.request.use(
   (config) => {
-    const token = Cookies.get("accessToken");
+    const token = store.getState().Auth.accessToken;
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
@@ -22,26 +23,41 @@ axios.interceptors.response.use(
     return response;
   },
   async (error: any) => {
+    const refreshToken = store.getState().Auth.refreshToken;
     const config = error.config;
-    if (error?.response?.status == 401 && !config._retry) {
+    if (error?.response?.status == 401 && !config._retry && refreshToken) {
       config._retry = true;
       config.headers = {};
-      try {
-        await refreshAccessToken().catch(() => {
-          // location.reload();
-        });
+      const refresh = await refreshAccessToken(refreshToken);
+      if (refresh.accessToken && refresh.refreshToken) {
+        store.dispatch(setAccessToken(refresh.accessToken));
+        store.dispatch(setRefreshToken(refresh.refreshToken));
         return axios(config);
-      } catch (error) {
-        return Promise.reject(error);
-      }
+      } else return Promise.reject(error);
     }
     return Promise.reject(error);
   }
 );
-const refreshAccessToken = async (): Promise<any> => {
-  await Axios.get("/auth/refresh-token", {
-    baseURL: API_BASE_URL,
-    withCredentials: true,
-  });
+export type Refresh = {
+  accessToken: string;
+  refreshToken: string;
+};
+
+const refreshAccessToken = async (refreshToken: string): Promise<Refresh> => {
+  try {
+    const res: AxiosResponse = await Axios.post(
+      "/auth/refresh-token",
+      {
+        refreshToken: refreshToken,
+      },
+      {
+        baseURL: API_BASE_URL,
+        withCredentials: true,
+      }
+    );
+    return res.data;
+  } catch (error) {
+    throw error;
+  }
 };
 export default axios;

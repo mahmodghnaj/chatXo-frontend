@@ -40,7 +40,7 @@ const Friend = ({ friend }: ComponentProps) => {
           setLocalCurrentChat({
             id: friend.recipient.id,
             firstName: friend.recipient.firstName,
-            lastName: friend.recipient.lastName,
+            lastName: friend.recipient?.lastName,
             status: friend.recipient.status,
             lastSeenAt: friend.recipient.lastSeenAt,
           })
@@ -55,21 +55,23 @@ const Friend = ({ friend }: ComponentProps) => {
           <div className="ml-2 max-w-[8rem] text-lg font-extrabold">
             <TextOverflow
               text={
-                friend.recipient.firstName + " " + friend.recipient.lastName
+                friend.recipient.firstName + " " + friend.recipient?.lastName
               }
             />
           </div>
         </div>
-        <button
-          className={`btn btn-outline btn-sm capitalize ${
-            isLoading && "loading"
-          }`}
-          onClick={() => goToChat()}
-          type="button"
-        >
-          <FiMessageSquare className="mr-1" />
-          Message
-        </button>
+        <div className="flex flex-nowrap">
+          <button
+            className={`btn btn-outline btn-sm capitalize ${
+              isLoading && "loading"
+            }`}
+            onClick={() => goToChat()}
+            type="button"
+          >
+            <FiMessageSquare className="mr-1" />
+            Message
+          </button>
+        </div>
       </div>
       <div className="divider my-3"></div>
     </>
