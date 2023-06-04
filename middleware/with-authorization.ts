@@ -15,6 +15,8 @@ const injectToken = (response: NextResponse, { refreshToken }: any) => {
     value: refreshToken,
     expires: new Date(new Date().setDate(new Date().getDate() + 60)),
     httpOnly: true,
+    sameSite: "lax",
+    secure: true,
   });
 };
 export const withAuthorization: MiddlewareFactory = (next: NextMiddleware) => {
