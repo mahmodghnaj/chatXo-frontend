@@ -3,9 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-  
-   
-    "build": "next build",
+    "base": "cat utilities/plugins-styled/base/*.css > utilities/plugins-styled/base/index.css && prejss-cli utilities/plugins-styled/base/index.css --format commonjs && rm utilities/plugins-styled/base/index.css",
+    "global": "cat utilities/plugins-styled/global/*.css > utilities/plugins-styled/global/index.css && prejss-cli utilities/plugins-styled/global/index.css --format commonjs && rm utilities/plugins-styled/global/index.css",
+    "styled": "cat utilities/plugins-styled/styled/*.css > utilities/plugins-styled/styled/index.css && prejss-cli utilities/plugins-styled/styled/index.css --format commonjs && rm utilities/plugins-styled/styled/index.css",
+    "customization-style": "npm run base && npm run global && npm run styled",
+    "dev": "npm run customization-style && next dev",
+    "build": "npm run customization-style && next build",
     "start": "next start",
     "lint": "next lint"
   },
