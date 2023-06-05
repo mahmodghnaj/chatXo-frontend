@@ -8,7 +8,7 @@
     "styled": "cat utilities/plugins-styled/styled/*.css > utilities/plugins-styled/styled/index.css && prejss-cli utilities/plugins-styled/styled/index.css --format commonjs && rm utilities/plugins-styled/styled/index.css",
     "customization-style": "npm run base && npm run global && npm run styled",
     "dev": "npm run customization-style && next dev",
-    "build": "npm run customization-style && next build",
+    "build": "next build",
     "start": "next start",
     "lint": "next lint"
   },
