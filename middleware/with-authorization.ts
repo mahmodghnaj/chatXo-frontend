@@ -15,7 +15,7 @@ const routesWithoutAuth = (pathname: string) => {
 // Function to inject the refreshToken as a cookie in the response
 const injectToken = (response: NextResponse, { refreshToken }: any) => {
   response.cookies.set({
-    name: "refreshToken",
+    name: "refresh",
     value: refreshToken,
     expires: new Date(new Date().setDate(new Date().getDate() + 60)),
     httpOnly: true,
@@ -48,7 +48,6 @@ export const withAuthorization: MiddlewareFactory = (next: NextMiddleware) => {
       injectToken(response, {
         refreshToken: verifiedToken.refreshToken,
       });
-
       return response;
     }
     // If the token is valid but the route requires authentication, proceed to the next middleware

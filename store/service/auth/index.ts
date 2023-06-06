@@ -17,7 +17,7 @@ export const authApi = baseApi.injectEndpoints({
             dispatch(setAccessToken(res.accessToken));
             dispatch(setRefreshToken(res.refreshToken));
             //TODO:: because domain backend difference frontend
-            Cookies.set("refreshToken", res.refreshToken, {
+            Cookies.set("refresh", res.refreshToken, {
               expires: new Date(new Date().setDate(new Date().getDate() + 60)),
             });
           },
@@ -33,7 +33,7 @@ export const authApi = baseApi.injectEndpoints({
             dispatch(setAccessToken(res.accessToken));
             dispatch(setRefreshToken(res.refreshToken));
             //TODO:: because domain backend difference frontend
-            Cookies.set("refreshToken", res.refreshToken, {
+            Cookies.set("refresh", res.refreshToken, {
               expires: new Date(new Date().setDate(new Date().getDate() + 60)),
             });
           },
@@ -41,7 +41,8 @@ export const authApi = baseApi.injectEndpoints({
       }),
       getSession: builder.query<Session, void>({
         query: () => ({
-          url: `/auth/session`,
+          url: `/auth/info-session`,
+          method: "get",
           onSuccess: async (dispatch, data) => {
             const res = data as Session;
             dispatch(setAccessToken(res.accessToken));

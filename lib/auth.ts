@@ -25,10 +25,10 @@ export const refreshToken = async (token: string) => {
 // Function to check the session and validate the refreshToken
 export const checkSession = (refreshToken: string) => {
   try {
-    return fetch(`${API_BASE_URL}auth/session`, {
+    return fetch(`${API_BASE_URL}auth/info-session`, {
       headers: {
         "Content-Type": "application/json",
-        Cookie: `refreshToken=${refreshToken}`,
+        Cookie: `refresh=${refreshToken}`,
       },
       credentials: "include", // Include cookies in the request
     })
@@ -41,7 +41,7 @@ export const checkSession = (refreshToken: string) => {
 
 // Function to verify the authentication of the request
 export async function verifyAuth(req: NextRequest) {
-  const token = req.cookies.get("refreshToken")?.value;
+  const token = req.cookies.get("refresh")?.value;
 
   if (token) {
     const verified = await checkSession(token);
