@@ -7,10 +7,12 @@ const axios = Axios.create({ baseURL: API_BASE_URL, withCredentials: true });
 axios.interceptors.request.use(
   (config) => {
     const token = store.getState().Auth.accessToken;
-    if (token) {
+    const refresh = store.getState().Auth.refreshToken;
+    if (config.url?.includes("info-session") && refresh) {
+      config.headers.Authorization = `Bearer ${refresh}`;
+    } else if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
-
     return config;
   },
   (error) => {

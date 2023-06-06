@@ -1,3 +1,4 @@
+import { store } from "@/store";
 import { setAccessToken, setRefreshToken } from "@/store/features/auth";
 import { setProfile } from "@/store/features/profile";
 import { InfoSignIn, SignInUser, SignUpUser } from "@/store/types/auth";
@@ -42,6 +43,7 @@ export const authApi = baseApi.injectEndpoints({
       getSession: builder.query<Session, void>({
         query: () => ({
           url: `/auth/info-session`,
+
           method: "get",
           onSuccess: async (dispatch, data) => {
             const res = data as Session;
