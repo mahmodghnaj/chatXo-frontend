@@ -4,7 +4,7 @@ import {
   friends as friendsData,
   friendshipRequests,
   friendsSending as friendsSendingData,
-  loadingMappingFriend,
+  loadingMappingFriendId,
 } from "@/store/features/profile";
 import { MappingFriendType, MyProfileType } from "@/store/types/profile";
 import { useSelector } from "react-redux";
@@ -14,7 +14,7 @@ export type ComponentProps = {
   mappingFriend: (arg: MappingFriendType) => void;
 };
 const Friend = ({ friend, mappingFriend }: ComponentProps) => {
-  const loading = useSelector(loadingMappingFriend);
+  const loading = useSelector(loadingMappingFriendId);
   const friends = useSelector(friendsData);
   const friendRequests = useSelector(friendshipRequests);
   const friendsSending = useSelector(friendsSendingData);
@@ -55,7 +55,9 @@ const Friend = ({ friend, mappingFriend }: ComponentProps) => {
               onClick={() =>
                 mappingFriend({ idFriend: friend.id, type: "accept" })
               }
-              className={`btn btn-accent  capitalize ${loading && "loading"}`}
+              className={`btn btn-accent  capitalize ${
+                loading.includes(friend.id) && "loading"
+              }`}
               type="button"
             >
               Accept
@@ -64,7 +66,9 @@ const Friend = ({ friend, mappingFriend }: ComponentProps) => {
               onClick={() =>
                 mappingFriend({ idFriend: friend.id, type: "reject" })
               }
-              className={`btn btn-accent  capitalize ${loading && "loading"}`}
+              className={`btn btn-accent  capitalize ${
+                loading.includes(friend.id) && "loading"
+              }`}
               type="button"
             >
               Reject
@@ -75,7 +79,7 @@ const Friend = ({ friend, mappingFriend }: ComponentProps) => {
           <div className="flex space-x-1 group relative">
             <button
               className={`btn btn-secondary capitalize opacity-100 ${
-                loading && "loading"
+                loading.includes(friend.id) && "loading"
               } group-hover:opacity-0 duration-300`}
               type="button"
             >
@@ -83,7 +87,7 @@ const Friend = ({ friend, mappingFriend }: ComponentProps) => {
             </button>
             <button
               className={`btn ${
-                loading && "loading"
+                loading.includes(friend.id) && "loading"
               } btn-error capitalize opacity-0 group-hover:opacity-100 duration-300 absolute inset-x-0 bottom-0`}
               type="button"
               onClick={() =>
@@ -97,7 +101,9 @@ const Friend = ({ friend, mappingFriend }: ComponentProps) => {
         {send && (
           <button
             onClick={() => mappingFriend({ idFriend: friend.id, type: "add" })}
-            className={`btn btn-success ${loading && "loading"} capitalize`}
+            className={`btn btn-success ${
+              loading.includes(friend.id) && "loading"
+            } capitalize`}
             type="button"
           >
             Add

@@ -10,7 +10,7 @@ import {
 import {
   changeStatusFriend,
   mappingFriend,
-  setLoadingMappingFriend,
+  deleteLoadingMappingFriendId,
 } from "@/store/features/profile";
 import { useAddRoomMutation, useGetChatMutation } from "@/store/service/chats";
 import { AddNewMessage, SendMessageType } from "@/store/types/chats";
@@ -65,8 +65,8 @@ const Home: NextPageWithLayout = () => {
   useEffect(() => {
     client?.subscribe("message", (res: AddNewMessage) => setNewMessage(res));
     client?.subscribe("mappingFriend", (res: MappingFriendType) => {
+      dispatch(deleteLoadingMappingFriendId(res.idFriend));
       dispatch(mappingFriend(res));
-      dispatch(setLoadingMappingFriend(false));
     });
     client?.subscribe("statusUser", (res: ChangeStatusUser) => {
       dispatch(changeStatusUser(res));

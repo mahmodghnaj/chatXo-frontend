@@ -1,7 +1,7 @@
 import {
+  addLoadingMappingFriendId,
   friends as friendsData,
   friendshipRequests,
-  setLoadingMappingFriend,
 } from "@/store/features/profile";
 import { ChangeEvent, useEffect, useRef, useState } from "react";
 import { BsPersonFillAdd } from "react-icons/bs";
@@ -42,7 +42,7 @@ const Friends = () => {
   };
 
   const mappingFriend = (arg: MappingFriendType) => {
-    dispatch(setLoadingMappingFriend(true));
+    dispatch(addLoadingMappingFriendId(arg.idFriend));
     client?.send<MappingFriendType>("mappingFriend", arg);
   };
 
