@@ -17,8 +17,8 @@ export const socialAuth: MiddlewareFactory = (next: NextMiddleware) => {
       request.nextUrl.pathname = "/";
       const res = NextResponse.redirect(request.nextUrl);
       if (token && refreshToken) {
-        res.cookies.set("accessToken", token);
-        res.cookies.set("refreshToken", refreshToken);
+        //res.cookies.set("accessToken", token);
+        res.cookies.set("refresh", refreshToken);
       }
       return res;
     }
