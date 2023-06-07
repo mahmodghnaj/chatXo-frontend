@@ -58,7 +58,7 @@ export const withAuthorization: MiddlewareFactory = (next: NextMiddleware) => {
     // If the token is not valid or does not exist, redirect to the sign-in page
     else {
       const url = new URL(`/sign-in`, request.url);
-      url.searchParams.set("callbackUrl ", encodeURI(request.url));
+      // url.searchParams.set("callbackUrl ", encodeURI(request.url));
       const res = NextResponse.redirect(url);
       res.cookies.delete("refresh");
       return res;
