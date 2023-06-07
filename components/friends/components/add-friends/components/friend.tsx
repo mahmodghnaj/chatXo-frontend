@@ -94,7 +94,7 @@ const Friend = ({ friend, mappingFriend }: ComponentProps) => {
         {send && (
           <button
             onClick={() => mappingFriend({ idFriend: friend.id, type: "add" })}
-            className={`btn btn-success capitalize`}
+            className={`btn btn-success ${loading && "loading"} capitalize`}
             type="button"
           >
             Add
