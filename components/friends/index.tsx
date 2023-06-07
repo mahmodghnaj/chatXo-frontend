@@ -1,7 +1,6 @@
 import {
   friends as friendsData,
   friendshipRequests,
-  mappingFriend as mappingFriendData,
 } from "@/store/features/profile";
 import { ChangeEvent, useEffect, useRef, useState } from "react";
 import { BsPersonFillAdd } from "react-icons/bs";
@@ -21,6 +20,7 @@ const Friends = () => {
   const [dialogAddFriends, setDialogAddFriends] = useState<boolean>(false);
   const [dialogFriendshipRequests, setDialogFriendshipRequests] =
     useState<boolean>(false);
+
   const refDialogAddFriends = useRef<DialogRef>(null);
   const refFriendshipRequests = useRef<DialogRef>(null);
 
@@ -42,6 +42,7 @@ const Friends = () => {
   const mappingFriend = (arg: MappingFriendType) => {
     client?.send<MappingFriendType>("mappingFriend", arg);
   };
+
   return (
     <>
       <div className="px-3 pb-3 pt-3 ">
