@@ -1,10 +1,14 @@
 # ChatXo
 
-The ChatXo is a Next.js application that allows two users to communicate with each other through real-time chat. It provides features such as friend management, allowing users to add, delete, and search for friends. The application supports authentication through social media platforms, including Google and GitHub, with the authentication implementation handled on the backend.
+The ChatXo is a Next.js application that allows two users to communicate with each other through real-time chat. It provides features such as friend management, allowing users to add, delete, and search for friends. The application supports authentication through social media platforms
 
 ## Demo
 
 Check out the [live demo](https://app-chat-psi.vercel.app/) of the application.
+
+## Backend Repository
+
+You can find the frontend source code in the [ChatXo-backend](https://github.com/mahmodghnaj/chatXo-backend) repository.
 
 ## Features
 
