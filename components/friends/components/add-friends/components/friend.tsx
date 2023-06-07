@@ -33,11 +33,16 @@ const Friend = ({ friend, mappingFriend }: ComponentProps) => {
       <div className="flex w-full items-center  justify-between mb-2">
         <div className=" flex items-center">
           <ImageUser status={friend.status} />
-          <div className="ml-2 max-w-[5rem] sm:max-w-[16rem]   md:max-w-[18rem] text-lg font-extrabold">
-            <TextOverflow
-              className="capitalize"
-              text={friend.firstName + " " + friend?.lastName}
-            />
+          <div className="flex flex-col ml-2">
+            <div className="max-w-[5rem] sm:max-w-[16rem] md:max-w-[18rem] text-lg font-extrabold">
+              <TextOverflow
+                className="capitalize"
+                text={friend.firstName + " " + friend?.lastName}
+              />
+            </div>
+            <div className="max-w-[5rem] sm:max-w-[16rem] md:max-w-[18rem] text-sm ">
+              <TextOverflow className="capitalize" text={friend?.email} />
+            </div>
           </div>
         </div>
         {isFriend && (

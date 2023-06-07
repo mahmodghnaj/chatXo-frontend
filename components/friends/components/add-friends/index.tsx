@@ -29,7 +29,7 @@ const AddFriends = ({ closeDialog, mappingFriend }: AddFriendsProps) => {
   }, [searchQuery]);
   return (
     <>
-      <div className="md:w-[700px] w-[300px] sm:w-[500px]  bg-base-300 rounded-lg">
+      <div className="md:w-[700px] w-auto sm:w-[500px]  bg-base-300 rounded-lg">
         <Header title="Add Friends" closeDialog={closeDialog} />
         <div className="divider"></div>
         <div className="p-4">

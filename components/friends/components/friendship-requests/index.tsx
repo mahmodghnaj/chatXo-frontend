@@ -17,7 +17,7 @@ const FriendshipRequests = ({
   const friends = useSelector(friendshipRequests);
   return (
     <>
-      <div className="md:w-[700px]  bg-base-300 rounded-lg">
+      <div className="md:w-[700px] w-auto sm:w-[500px]  bg-base-300 rounded-lg">
         <Header title="Friendship Requests" closeDialog={closeDialog} />
         <div className="divider"></div>
         {friends?.length ? (
