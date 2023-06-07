@@ -9,6 +9,7 @@ axios.interceptors.request.use(
     const token = store.getState().Auth.accessToken;
     const refresh = store.getState().Auth.refreshToken;
     if (config.url?.includes("info-session") && refresh) {
+      // should send in cookie but don't use please write commit in line 37 in file _app
       config.headers.Authorization = `Bearer ${refresh}`;
     } else if (token) {
       config.headers.Authorization = `Bearer ${token}`;

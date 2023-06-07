@@ -4,6 +4,8 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useSignUpMutation } from "@/store/service/auth";
 import { useEffect } from "react";
+import { FcGoogle } from "react-icons/fc";
+import { AiOutlineGithub } from "react-icons/ai";
 const signUpSchema = object({
   firstName: string().min(1, "Required"),
   lastName: string().min(1, "Required"),
@@ -35,9 +37,13 @@ const FormSignUp = () => {
   useEffect(() => {
     if (isSuccess) router.push("/");
   }, [isSuccess, router]);
+  const loginSocial = (type: string) => {
+    const url = `${process.env.NEXT_PUBLIC_BASE_URL}auth/${type}`;
+    window.location.href = url;
+  };
   return (
     <>
-      <div className="bg-base-200  w-auto sm:w-96 rounded-3xl p-8">
+      <div className="bg-base-200  w-auto sm:w-96 rounded-3xl p-8 z-20">
         <div className="flex justify-between items-center">
           <p className="font-thin ">Welcome to chat App</p>
           <p className=" font-serif text-xs">
@@ -131,6 +137,23 @@ const FormSignUp = () => {
             Sign Up
           </button>
         </form>
+        <div className="my-5 flex justify-center">OR</div>
+        <div className="flex flex-nowrap space-x-2 items-center justify-center">
+          <button
+            onClick={() => loginSocial("google")}
+            className="btn btn-sm gap-2  btn-secondary capitalize"
+          >
+            <FcGoogle size="20px" />
+            Sign up with Google
+          </button>
+
+          <button
+            onClick={() => loginSocial("github")}
+            className="btn btn-square btn-sm"
+          >
+            <AiOutlineGithub size="20px" />
+          </button>
+        </div>
       </div>
     </>
   );

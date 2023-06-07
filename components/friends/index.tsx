@@ -7,7 +7,6 @@ import { ChangeEvent, useEffect, useRef, useState } from "react";
 import { BsPersonFillAdd } from "react-icons/bs";
 import { FiSearch } from "react-icons/fi";
 import { useDispatch, useSelector } from "react-redux";
-import LoadingSpinner from "../loading-spinner";
 import Friend from "./components/friend";
 import { BiGitPullRequest } from "react-icons/bi";
 import Dialog, { DialogRef } from "../dialog";
@@ -19,11 +18,9 @@ import SvgIcon from "../../public/svg/add-friend.svg";
 
 const Friends = () => {
   const client = useSocketIoClient();
-  const dispatch = useDispatch();
   const [dialogAddFriends, setDialogAddFriends] = useState<boolean>(false);
   const [dialogFriendshipRequests, setDialogFriendshipRequests] =
     useState<boolean>(false);
-
   const refDialogAddFriends = useRef<DialogRef>(null);
   const refFriendshipRequests = useRef<DialogRef>(null);
 
@@ -37,17 +34,14 @@ const Friends = () => {
       friend.recipient.firstName + " " + friend.recipient?.lastName;
     return fullName.toLowerCase().includes(searchQuery.toLowerCase());
   });
+
   const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(e.target.value);
   };
+
   const mappingFriend = (arg: MappingFriendType) => {
     client?.send<MappingFriendType>("mappingFriend", arg);
   };
-  useEffect(() => {
-    client?.subscribe("mappingFriend", (res: MappingFriendType) => {
-      dispatch(mappingFriendData(res));
-    });
-  }, []);
   return (
     <>
       <div className="px-3 pb-3 pt-3 ">

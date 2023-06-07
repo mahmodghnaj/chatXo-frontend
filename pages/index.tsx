@@ -7,10 +7,10 @@ import {
   currentChat,
   localCurrentChat,
 } from "@/store/features/chats";
-import { changeStatusFriend } from "@/store/features/profile";
+import { changeStatusFriend, mappingFriend } from "@/store/features/profile";
 import { useAddRoomMutation, useGetChatMutation } from "@/store/service/chats";
 import { AddNewMessage, SendMessageType } from "@/store/types/chats";
-import { ChangeStatusUser } from "@/store/types/profile";
+import { ChangeStatusUser, MappingFriendType } from "@/store/types/profile";
 import { useSocketIoClient } from "@/utilities/common/hooks/use-socket-io";
 import { GetServerSideProps } from "next";
 import Link from "next/link";
@@ -42,15 +42,7 @@ const Home: NextPageWithLayout = () => {
         text: message,
       });
     }
-  }, [client, isSuccess, newRoom, message]);
-
-  // Watch status user
-  useEffect(() => {
-    client?.subscribe("statusUser", (res: ChangeStatusUser) => {
-      dispatch(changeStatusUser(res));
-      dispatch(changeStatusFriend(res));
-    });
-  }, []);
+  }, [isSuccess, newRoom]);
 
   // Send message
   const send = (v: string) => {
@@ -68,10 +60,18 @@ const Home: NextPageWithLayout = () => {
 
   useEffect(() => {
     client?.subscribe("message", (res: AddNewMessage) => setNewMessage(res));
+    client?.subscribe("mappingFriend", (res: MappingFriendType) => {
+      dispatch(mappingFriend(res));
+    });
+    client?.subscribe("statusUser", (res: ChangeStatusUser) => {
+      dispatch(changeStatusUser(res));
+      dispatch(changeStatusFriend(res));
+    });
   }, []);
 
   useEffect(() => {
     if (newMessage) {
+      //dispatch(addNewMessage(newMessage));
       if (isChatExists(newMessage.idRoom)) {
         dispatch(addNewMessage(newMessage));
       } else {

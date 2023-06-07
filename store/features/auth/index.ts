@@ -22,6 +22,9 @@ export const authSlice = createSlice({
     },
     setRefreshToken(state, { payload }: PayloadAction<string>) {
       state.refreshToken = payload;
+      Cookies.set("refresh", payload, {
+        expires: new Date(new Date().setDate(new Date().getDate() + 60)),
+      });
     },
     setMeInfo(state, { payload }: PayloadAction<MyProfileType>) {
       state.myInfo = payload;

@@ -28,7 +28,7 @@ export const checkSession = (refreshToken: string) => {
     return fetch(`${API_BASE_URL}auth/info-session`, {
       headers: {
         "Content-Type": "application/json",
-        // Cookie: `refresh=${refreshToken}`, //where domain frontend diffrent backend
+        // Cookie: `refresh=${refreshToken}`, // don't use please write commit in line 37 in file _app
         Authorization: `Bearer ${refreshToken}`,
       },
       credentials: "include", // Include cookies in the request
@@ -43,7 +43,6 @@ export const checkSession = (refreshToken: string) => {
 // Function to verify the authentication of the request
 export async function verifyAuth(req: NextRequest) {
   const token = req.cookies.get("refresh")?.value;
-
   if (token) {
     try {
       const verified = await checkSession(token);

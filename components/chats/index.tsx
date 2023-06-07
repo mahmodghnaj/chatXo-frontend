@@ -1,7 +1,7 @@
 import { chats, totalChats } from "@/store/features/chats";
 import { useGetChatsQuery } from "@/store/service/chats";
 import { ChatType } from "@/store/types/chats";
-import { FC } from "react";
+import { FC, useEffect } from "react";
 import { useSelector } from "react-redux";
 import InfiniteScroll from "../infinite-scroll";
 import SvgIcon from "../../public/svg/add-chat.svg";

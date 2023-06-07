@@ -103,7 +103,9 @@ export const chatsSlice = createSlice({
           state.currentChat.lastMessage.received = true;
           if (chat) chat.lastMessage.received = true;
         } else {
-          state.currentChat.lastMessage.received = false;
+          state.currentChat.lastMessage
+            ? (state.currentChat.lastMessage.received = false)
+            : "";
         }
       }
       if (chat) {

@@ -6,10 +6,15 @@ import Dialog, { DialogRef } from "@/components/dialog";
 import Settings from "@/components/settings";
 import { useSelector } from "react-redux";
 import { profile } from "@/store/features/profile";
+import { useLogoutMutation } from "@/store/service/auth";
 const InfoUser = () => {
   const [showDialog, setShowDialog] = useState<boolean>(false);
   const refDialog = useRef<DialogRef>(null);
   const infoProfile = useSelector(profile);
+  const [logout, { isSuccess }] = useLogoutMutation();
+  if (isSuccess) {
+    window.location.reload(); // Reload the page
+  }
   return (
     <>
       <div className="h-16 flex justify-center items-center border-t-success border-t-2 px-3 ">
@@ -36,7 +41,10 @@ const InfoUser = () => {
               <AiOutlineSetting className="h-7 w-7 mr-3" />
               <div className="text-lg font-medium">Settings</div>
             </li>
-            <li className="btn btn-ghost mb-4 capitalize flex w-full justify-start">
+            <li
+              onClick={() => logout()}
+              className="btn btn-ghost mb-4 capitalize flex w-full justify-start"
+            >
               <FiLogOut className="h-7 w-7 mr-3" />
               <div className="text-lg font-medium"> Logout</div>
             </li>

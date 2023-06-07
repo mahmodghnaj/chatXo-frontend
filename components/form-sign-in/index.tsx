@@ -41,7 +41,7 @@ const FormSignIn = () => {
   };
   return (
     <>
-      <div className="bg-base-200 w-auto sm:w-96  rounded-3xl p-8">
+      <div className="bg-base-200 w-auto sm:w-96  rounded-3xl p-8 z-20">
         <div className="flex justify-between items-center">
           <p className="font-thin ">Welcome to chat App</p>
           <p className=" font-serif text-xs">
@@ -55,7 +55,7 @@ const FormSignIn = () => {
           </p>
         </div>
         <div>
-          <h1 className="text-4xl font-bold">Sign In</h1>
+          <h1 className="text-4xl font-bold ">Sign In</h1>
         </div>
         <form onSubmit={handleSubmit(onSubmitHandler)}>
           <div className="mt-5 space-y-3">

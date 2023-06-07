@@ -6,7 +6,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Provider } from "react-redux";
 import { store } from "@/store";
-import { setAccessToken, setRefreshToken } from "@/store/features/auth";
+import { setRefreshToken } from "@/store/features/auth";
 import Cookies from "cookies";
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement) => ReactNode;
@@ -33,9 +33,14 @@ const App = ({ Component, pageProps, refreshToken }: AppPropsWithLayout) => {
   );
 };
 App.getInitialProps = async ({ ctx }: AppContext) => {
+  /*
+    Because of domain backend different domain frontend can see you this issus  =>
+    https://stackoverflow.com/questions/62749492/set-cookie-was-blocked-because-its-domain-attribute-was-invalid-with-regards-to
+  */
   if (ctx.req && ctx.res) {
     const cookie = new Cookies(ctx.req, ctx.res);
     const refreshToken = cookie.get("refresh");
+
     return {
       refreshToken,
     };

@@ -3,7 +3,6 @@ import { setAccessToken, setRefreshToken } from "@/store/features/auth";
 import { setProfile } from "@/store/features/profile";
 import { InfoSignIn, SignInUser, SignUpUser } from "@/store/types/auth";
 import { Session } from "@/store/types/auth";
-import Cookies from "js-cookie";
 import { baseApi } from "..";
 export const authApi = baseApi.injectEndpoints({
   endpoints: (builder) => {
@@ -17,10 +16,6 @@ export const authApi = baseApi.injectEndpoints({
             const res = data as InfoSignIn;
             dispatch(setAccessToken(res.accessToken));
             dispatch(setRefreshToken(res.refreshToken));
-            //TODO:: because domain backend difference frontend
-            Cookies.set("refresh", res.refreshToken, {
-              expires: new Date(new Date().setDate(new Date().getDate() + 60)),
-            });
           },
         }),
       }),
@@ -33,10 +28,6 @@ export const authApi = baseApi.injectEndpoints({
             const res = data as InfoSignIn;
             dispatch(setAccessToken(res.accessToken));
             dispatch(setRefreshToken(res.refreshToken));
-            //TODO:: because domain backend difference frontend
-            Cookies.set("refresh", res.refreshToken, {
-              expires: new Date(new Date().setDate(new Date().getDate() + 60)),
-            });
           },
         }),
       }),
@@ -53,9 +44,20 @@ export const authApi = baseApi.injectEndpoints({
           },
         }),
       }),
+      logout: builder.mutation<string, void>({
+        query: (arg) => ({
+          method: "get",
+          url: "auth/logout",
+          onSuccess: async (dispatch, data) => {},
+        }),
+      }),
     };
   },
 });
 
-export const { useSignInMutation, useSignUpMutation, useGetSessionQuery } =
-  authApi;
+export const {
+  useSignInMutation,
+  useSignUpMutation,
+  useGetSessionQuery,
+  useLogoutMutation,
+} = authApi;

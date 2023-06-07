@@ -26,8 +26,6 @@ const injectToken = (response: NextResponse, { refreshToken }: any) => {
 export const withAuthorization: MiddlewareFactory = (next: NextMiddleware) => {
   return async (request: NextRequest, _next: NextFetchEvent) => {
     const pathname = request.nextUrl.pathname;
-    const response = NextResponse.next();
-
     // Exclude requests to the Next.js internal routes
     if (pathname.startsWith("/_next/")) return NextResponse.next();
 
@@ -37,28 +35,33 @@ export const withAuthorization: MiddlewareFactory = (next: NextMiddleware) => {
     // If the token is valid and the route does not require authentication, redirect to home
     if (verifiedToken && routesWithoutAuth(pathname)) {
       const url = new URL(`/`, request.url);
-      return NextResponse.redirect(url);
-    }
-
-    // If the route does not require authentication, proceed to the next middleware
-    if (routesWithoutAuth(pathname)) return NextResponse.next();
-
-    // If the token is valid and has a refreshToken, inject it as a cookie in the response
-    if (verifiedToken && verifiedToken.refreshToken) {
-      injectToken(response, {
+      const res = NextResponse.redirect(url);
+      injectToken(res, {
         refreshToken: verifiedToken.refreshToken,
       });
-      return response;
+      return res;
+    }
+    // If the route does not require authentication, proceed to the next middleware
+    if (routesWithoutAuth(pathname)) {
+      const res = NextResponse.next();
+      res.cookies.delete("refresh");
+      return res;
     }
     // If the token is valid but the route requires authentication, proceed to the next middleware
     else if (verifiedToken && !routesWithoutAuth(pathname)) {
-      return NextResponse.next();
+      const res = NextResponse.next();
+      injectToken(res, {
+        refreshToken: verifiedToken.refreshToken,
+      });
+      return res;
     }
     // If the token is not valid or does not exist, redirect to the sign-in page
     else {
       const url = new URL(`/sign-in`, request.url);
       url.searchParams.set("callbackUrl ", encodeURI(request.url));
-      return NextResponse.redirect(url);
+      const res = NextResponse.redirect(url);
+      res.cookies.delete("refresh");
+      return res;
     }
   };
 };
