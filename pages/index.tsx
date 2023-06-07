@@ -7,7 +7,11 @@ import {
   currentChat,
   localCurrentChat,
 } from "@/store/features/chats";
-import { changeStatusFriend, mappingFriend } from "@/store/features/profile";
+import {
+  changeStatusFriend,
+  mappingFriend,
+  setLoadingMappingFriend,
+} from "@/store/features/profile";
 import { useAddRoomMutation, useGetChatMutation } from "@/store/service/chats";
 import { AddNewMessage, SendMessageType } from "@/store/types/chats";
 import { ChangeStatusUser, MappingFriendType } from "@/store/types/profile";
@@ -62,6 +66,7 @@ const Home: NextPageWithLayout = () => {
     client?.subscribe("message", (res: AddNewMessage) => setNewMessage(res));
     client?.subscribe("mappingFriend", (res: MappingFriendType) => {
       dispatch(mappingFriend(res));
+      dispatch(setLoadingMappingFriend(false));
     });
     client?.subscribe("statusUser", (res: ChangeStatusUser) => {
       dispatch(changeStatusUser(res));

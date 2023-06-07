@@ -8,9 +8,11 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 export type State = {
   profile: MyProfileType | null;
+  loadingMappingFriend: boolean;
 };
 const initialState: State = {
   profile: null,
+  loadingMappingFriend: false,
 };
 export const profileSlice = createSlice({
   name: "Profile",
@@ -78,11 +80,21 @@ export const profileSlice = createSlice({
         }
       });
     },
+    setLoadingMappingFriend(state, { payload }: PayloadAction<boolean>) {
+      state.loadingMappingFriend = payload;
+    },
   },
 });
-export const { setProfile, updateProfile, mappingFriend, changeStatusFriend } =
-  profileSlice.actions;
+export const {
+  setProfile,
+  updateProfile,
+  mappingFriend,
+  changeStatusFriend,
+  setLoadingMappingFriend,
+} = profileSlice.actions;
 export const profile = (state: RootState) => state.Profile.profile;
+export const loadingMappingFriend = (state: RootState) =>
+  state.Profile.loadingMappingFriend;
 export const friends = (state: RootState) =>
   state.Profile.profile?.friends.filter((item) => item.status === 3);
 export const friendshipRequests = (state: RootState) =>

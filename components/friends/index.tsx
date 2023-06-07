@@ -1,6 +1,7 @@
 import {
   friends as friendsData,
   friendshipRequests,
+  setLoadingMappingFriend,
 } from "@/store/features/profile";
 import { ChangeEvent, useEffect, useRef, useState } from "react";
 import { BsPersonFillAdd } from "react-icons/bs";
@@ -16,6 +17,7 @@ import { MappingFriendType } from "@/store/types/profile";
 import SvgIcon from "../../public/svg/add-friend.svg";
 
 const Friends = () => {
+  const dispatch = useDispatch();
   const client = useSocketIoClient();
   const [dialogAddFriends, setDialogAddFriends] = useState<boolean>(false);
   const [dialogFriendshipRequests, setDialogFriendshipRequests] =
@@ -40,6 +42,7 @@ const Friends = () => {
   };
 
   const mappingFriend = (arg: MappingFriendType) => {
+    dispatch(setLoadingMappingFriend(true));
     client?.send<MappingFriendType>("mappingFriend", arg);
   };
 

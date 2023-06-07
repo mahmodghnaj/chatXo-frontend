@@ -4,14 +4,17 @@ import {
   friends as friendsData,
   friendshipRequests,
   friendsSending as friendsSendingData,
+  loadingMappingFriend,
 } from "@/store/features/profile";
 import { MappingFriendType, MyProfileType } from "@/store/types/profile";
 import { useSelector } from "react-redux";
+
 export type ComponentProps = {
   friend: MyProfileType;
   mappingFriend: (arg: MappingFriendType) => void;
 };
 const Friend = ({ friend, mappingFriend }: ComponentProps) => {
+  const loading = useSelector(loadingMappingFriend);
   const friends = useSelector(friendsData);
   const friendRequests = useSelector(friendshipRequests);
   const friendsSending = useSelector(friendsSendingData);
@@ -49,7 +52,7 @@ const Friend = ({ friend, mappingFriend }: ComponentProps) => {
               onClick={() =>
                 mappingFriend({ idFriend: friend.id, type: "accept" })
               }
-              className={`btn btn-accent  capitalize`}
+              className={`btn btn-accent  capitalize ${loading && "loading"}`}
               type="button"
             >
               Accept
@@ -58,7 +61,7 @@ const Friend = ({ friend, mappingFriend }: ComponentProps) => {
               onClick={() =>
                 mappingFriend({ idFriend: friend.id, type: "reject" })
               }
-              className={`btn btn-error  capitalize`}
+              className={`btn btn-accent  capitalize ${loading && "loading"}`}
               type="button"
             >
               Reject
@@ -68,13 +71,17 @@ const Friend = ({ friend, mappingFriend }: ComponentProps) => {
         {isSending && (
           <div className="flex space-x-1 group relative">
             <button
-              className={`btn btn-secondary capitalize opacity-100 group-hover:opacity-0 duration-300`}
+              className={`btn btn-secondary capitalize opacity-100 ${
+                loading && "loading"
+              } group-hover:opacity-0 duration-300`}
               type="button"
             >
               Pending
             </button>
             <button
-              className={`btn  btn-error capitalize opacity-0 group-hover:opacity-100 duration-300 absolute inset-x-0 bottom-0`}
+              className={`btn ${
+                loading && "loading"
+              } btn-error capitalize opacity-0 group-hover:opacity-100 duration-300 absolute inset-x-0 bottom-0`}
               type="button"
               onClick={() =>
                 mappingFriend({ idFriend: friend.id, type: "reject" })
