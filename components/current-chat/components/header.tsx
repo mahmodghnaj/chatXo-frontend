@@ -15,7 +15,7 @@ const Header = ({ name, lastSeen, status }: ComponentProps) => {
         <div className="ml-2 flex justify-between items-center w-full">
           <div>
             <div className="text-lg max-w-[5rem] sm:max-w-[16rem] md:max-w-[18rem] font-extrabold flex flex-col">
-              <TextOverflow text={name} />
+              <TextOverflow className="capitalize" text={name} />
             </div>
             <div>
               {status == "Online" ? (

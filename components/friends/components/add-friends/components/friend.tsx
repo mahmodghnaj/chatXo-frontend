@@ -34,7 +34,10 @@ const Friend = ({ friend, mappingFriend }: ComponentProps) => {
         <div className=" flex items-center">
           <ImageUser status={friend.status} />
           <div className="ml-2 max-w-[5rem] sm:max-w-[16rem]   md:max-w-[18rem] text-lg font-extrabold">
-            <TextOverflow text={friend.firstName + " " + friend?.lastName} />
+            <TextOverflow
+              className="capitalize"
+              text={friend.firstName + " " + friend?.lastName}
+            />
           </div>
         </div>
         {isFriend && (

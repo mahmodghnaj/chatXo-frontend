@@ -54,6 +54,7 @@ const Friend = ({ friend }: ComponentProps) => {
           <ImageUser status={friend.recipient.status} />
           <div className="ml-2 max-w-[8rem] text-lg font-extrabold">
             <TextOverflow
+              className="capitalize"
               text={
                 friend.recipient.firstName + " " + friend.recipient?.lastName
               }

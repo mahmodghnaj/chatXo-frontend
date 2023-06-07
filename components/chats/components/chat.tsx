@@ -44,7 +44,7 @@ const Chat = ({ chat }: ChatProps) => {
           <div className="ml-2 flex justify-between items-center w-full">
             <div className="max-w-[5rem] sm:max-w-[10rem] md:max-w-[12rem] ">
               <TextOverflow
-                className="text-lg font-extrabold"
+                className="text-lg capitalize font-extrabold"
                 text={chat.user.firstName + " " + chat.user?.lastName}
               />
               <div className="flex items-center">
@@ -58,7 +58,7 @@ const Chat = ({ chat }: ChatProps) => {
                   </div>
                 )}
                 <TextOverflow
-                  className="font-light "
+                  className="font-light"
                   text={chat?.lastMessage?.text}
                 />
               </div>
