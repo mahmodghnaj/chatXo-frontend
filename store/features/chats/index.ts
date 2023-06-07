@@ -43,6 +43,7 @@ export const chatsSlice = createSlice({
       state.totalChats = payload;
     },
     setMessages: (state, { payload }: PayloadAction<MessageType[]>) => {
+      if (state.messages.length === 1) state.messages = [];
       state.messages.push(...payload);
     },
     setTotalMessages: (
