@@ -1,38 +1,44 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# ChatXo
 
-## Getting Started
+The ChatXo is a Next.js application that allows two users to communicate with each other through real-time chat. It provides features such as friend management, allowing users to add, delete, and search for friends. The application supports authentication through social media platforms, including Google and GitHub, with the authentication implementation handled on the backend.
 
-First, run the development server:
+## Demo
+
+Check out the [live demo](https://app-chat-psi.vercel.app/) of the application.
+
+## Features
+
+- Real-time Chat: Users can engage in real-time chat with each other, sending and receiving messages instantly.
+- Friend Management: Users can add friends, delete friends, and search for friends to initiate chats with them.
+- Last Seen Date: The application displays the last seen date of each user, indicating when they were last active.
+- User Status: Users' online/offline status is shown, indicating whether they are currently active or not.
+- Message Receipt: The application provides flags to indicate whether a message has been received or not.
+- Social Media Authentication: Users can log in or register using their Google or GitHub accounts for seamless authentication.
+- Middleware authentication in Next.js (server-side)
+- State Management: Redux Toolkit is used for efficient state management in the application.
+- UI Design: The application uses Tailwind CSS for a responsive and visually appealing user interface.
+
+## Technologies Used
+
+- [Next.js](https://nextjs.org/): A React framework for building server-side rendered and statically generated applications.
+- [Tailwind CSS](https://tailwindcss.com/): A utility-first CSS framework for rapidly building custom user interfaces.
+- [Socket.IO](https://socket.io/): A library that enables real-time, bidirectional, and event-based communication between the browser and the server.
+- [Redux Toolkit](https://redux-toolkit.js.org/): A package that simplifies Redux state management and provides utilities for efficient development.
+
+## Installation
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
+$ npm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Running the app
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+```bash
+# development
+$ npm run dev
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+# production mode
+$ npm run build
+```
