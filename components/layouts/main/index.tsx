@@ -2,13 +2,19 @@ import { ReactElement } from "react";
 import Sidebar from "@/components/sidebar";
 import { ProvideSocketIoClient } from "@/utilities/common/hooks/use-socket-io";
 import { useGetSessionQuery } from "@/store/service/auth";
+import InitialLoading from "@/components/initial-loading";
 
 type componentProps = {
   children: ReactElement;
 };
 const Main = ({ children }: componentProps) => {
   const { isSuccess } = useGetSessionQuery();
-  if (!isSuccess) return <></>;
+  if (!isSuccess)
+    return (
+      <div className="w-full h-full flex justify-center items-center">
+        <InitialLoading />
+      </div>
+    );
   return (
     <>
       <ProvideSocketIoClient>

@@ -1,0 +1,113 @@
+.progress {
+  @apply relative w-full appearance-none overflow-hidden;
+  @apply h-2 rounded-box;
+  &::-moz-progress-bar {
+    @apply bg-neutral;
+  }
+  &-primary::-moz-progress-bar {
+    @apply bg-primary;
+  }
+  &-secondary::-moz-progress-bar {
+    @apply bg-secondary;
+  }
+  &-accent::-moz-progress-bar {
+    @apply bg-accent;
+  }
+  &-info::-moz-progress-bar {
+    @apply bg-info;
+  }
+  &-success::-moz-progress-bar {
+    @apply bg-success;
+  }
+  &-warning::-moz-progress-bar {
+    @apply bg-warning;
+  }
+  &-error::-moz-progress-bar {
+    @apply bg-error;
+  }
+
+  &:indeterminate {
+    --progress-color: hsl(var(--n));
+  }
+  &-primary:indeterminate {
+    --progress-color: hsl(var(--p));
+  }
+  &-secondary:indeterminate {
+    --progress-color: hsl(var(--s));
+  }
+  &-accent:indeterminate {
+    --progress-color: hsl(var(--a));
+  }
+  &-info:indeterminate {
+    --progress-color: hsl(var(--in));
+  }
+  &-success:indeterminate {
+    --progress-color: hsl(var(--su));
+  }
+  &-warning:indeterminate {
+    --progress-color: hsl(var(--wa));
+  }
+  &-error:indeterminate {
+    --progress-color: hsl(var(--er));
+  }
+
+  &::-webkit-progress-bar {
+    @apply bg-neutral/20 rounded-box;
+  }
+  &::-webkit-progress-value {
+    @apply bg-neutral-focus rounded-box;
+  }
+  &-primary::-webkit-progress-value {
+    @apply bg-primary;
+  }
+  &-secondary::-webkit-progress-value {
+    @apply bg-secondary;
+  }
+  &-accent::-webkit-progress-value {
+    @apply bg-accent;
+  }
+  &-info::-webkit-progress-value {
+    @apply bg-info;
+  }
+  &-success::-webkit-progress-value {
+    @apply bg-success;
+  }
+  &-warning::-webkit-progress-value {
+    @apply bg-warning;
+  }
+  &-error::-webkit-progress-value {
+    @apply bg-error;
+  }
+}
+
+.progress:indeterminate {
+  background-image: repeating-linear-gradient(
+    90deg,
+    var(--progress-color) -1%,
+    var(--progress-color) 10%,
+    transparent 10%,
+    transparent 90%
+  );
+  background-size: 200%;
+  background-position-x: 15%;
+  animation: progress-loading 5s ease-in-out infinite;
+}
+.progress:indeterminate::-moz-progress-bar {
+  @apply bg-neutral/20;
+  background-image: repeating-linear-gradient(
+    90deg,
+    var(--progress-color) -1%,
+    var(--progress-color) 10%,
+    transparent 10%,
+    transparent 90%
+  );
+  background-size: 200%;
+  background-position-x: 15%;
+  animation: progress-loading 5s ease-in-out infinite;
+}
+
+@keyframes progress-loading {
+  50% {
+    background-position-x: -115%;
+  }
+}
