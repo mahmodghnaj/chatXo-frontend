@@ -1,11 +1,15 @@
 import ImageUser from "@/components/image-user";
 import TextOverflow from "@/components/text-overflow";
+import { loadingMappingFriendId } from "@/store/features/profile";
 import { Friend as FriendType, MappingFriendType } from "@/store/types/profile";
+import { useSelector } from "react-redux";
 export type ComponentProps = {
   friend: FriendType;
   mappingFriend: (arg: MappingFriendType) => void;
 };
 const Friend = ({ friend, mappingFriend }: ComponentProps) => {
+  const loading = useSelector(loadingMappingFriendId);
+
   return (
     <>
       <div className="flex w-full items-center  justify-between mb-2">
@@ -15,8 +19,9 @@ const Friend = ({ friend, mappingFriend }: ComponentProps) => {
             <TextOverflow
               className="capitalize"
               text={
-                friend.recipient.firstName + " " + friend.recipient?.lastName ??
-                ""
+                friend.recipient.firstName +
+                " " +
+                (friend.recipient?.lastName ?? "")
               }
             />
           </div>
@@ -26,7 +31,9 @@ const Friend = ({ friend, mappingFriend }: ComponentProps) => {
             onClick={() =>
               mappingFriend({ idFriend: friend.recipient.id, type: "accept" })
             }
-            className={`btn btn-success btn-md capitalize`}
+            className={`btn btn-success btn-md capitalize ${
+              loading.includes(friend.recipient.id) && "loading"
+            }`}
             type="button"
           >
             Accept
@@ -35,7 +42,9 @@ const Friend = ({ friend, mappingFriend }: ComponentProps) => {
             onClick={() =>
               mappingFriend({ idFriend: friend.recipient.id, type: "reject" })
             }
-            className={`btn btn-error btn-md capitalize`}
+            className={`btn btn-error btn-md capitalize ${
+              loading.includes(friend.recipient.id) && "loading"
+            }`}
             type="button"
           >
             Reject

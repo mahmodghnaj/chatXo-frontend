@@ -25,9 +25,8 @@ const InfoUser = () => {
           <label tabIndex={0} className="btn w-full">
             <div className="flex w-full  justify-between">
               <div className="overflow-hidden capitalize whitespace-nowrap text-ellipsis">
-                {(infoProfile &&
-                  infoProfile.firstName + " " + infoProfile?.lastName) ??
-                  ""}
+                {infoProfile &&
+                  infoProfile.firstName + " " + (infoProfile?.lastName ?? "")}
               </div>
               <div>
                 <CiMenuKebab className="h-4 w-4" />

@@ -56,7 +56,7 @@ const CurrentChat: FC<ComponentProps> = ({
 
   const name = localCurrentChat
     ? localCurrentChat.firstName + " " + localCurrentChat.lastName ?? ""
-    : currentChat?.user.firstName + " " + currentChat?.user?.lastName ?? "";
+    : currentChat?.user.firstName + " " + (currentChat?.user?.lastName ?? "");
 
   const status: "Online" | "Offline" | undefined = localCurrentChat
     ? localCurrentChat.status
