@@ -1,8 +1,5 @@
 import {
   addNewChat,
-  deleteChat,
-  resetChats,
-  resetMessages,
   setChats,
   setCurrentChat,
   setLoadingGetMessages,
@@ -96,27 +93,6 @@ export const chatsApi = baseApi.injectEndpoints({
           },
         }),
       }),
-      deleteAllChats: builder.mutation<void, void>({
-        query: () => ({
-          url: `room`,
-          method: "delete",
-          onSuccess: async (dispatch, data) => {
-            dispatch(resetChats());
-            dispatch(resetMessages());
-            dispatch(setCurrentChat(null));
-            dispatch(setLocalCurrentChat(null));
-          },
-        }),
-      }),
-      deleteChat: builder.mutation<void, string>({
-        query: (id) => ({
-          url: `room/${id}`,
-          method: "delete",
-          onSuccess: async (dispatch, data) => {
-            dispatch(deleteChat(id));
-          },
-        }),
-      }),
     };
   },
 });
@@ -127,6 +103,4 @@ export const {
   useCheckChatMutation,
   useAddRoomMutation,
   useGetChatMutation,
-  useDeleteAllChatsMutation,
-  useDeleteChatMutation,
 } = chatsApi;

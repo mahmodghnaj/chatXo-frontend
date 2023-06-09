@@ -1,4 +1,4 @@
-import { currentChat } from "@/store/features/chats";
+import { currentChat, localCurrentChat } from "@/store/features/chats";
 import { useEffect, useState } from "react";
 import { TfiClose } from "react-icons/tfi";
 import { useSelector } from "react-redux";
@@ -11,6 +11,7 @@ type PropsComponent = {
 const PortalRoot = ({ setShowPortalRoot }: PropsComponent) => {
   const [mounted, setMounted] = useState(false);
   const current = useSelector(currentChat);
+  const localChat = useSelector(localCurrentChat);
   useEffect(() => {
     setMounted(true);
     return () => {
@@ -29,10 +30,10 @@ const PortalRoot = ({ setShowPortalRoot }: PropsComponent) => {
     event.stopPropagation();
   };
   useEffect(() => {
-    if (current && mounted) {
+    if ((current || localChat) && mounted) {
       hidePortalRoot(null);
     }
-  }, [current]);
+  }, [current, localChat]);
   return (
     <>
       <div className="relative" role={"dialog"} aria-modal="true">

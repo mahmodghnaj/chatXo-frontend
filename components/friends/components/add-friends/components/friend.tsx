@@ -37,7 +37,7 @@ const Friend = ({ friend, mappingFriend }: ComponentProps) => {
             <div className="max-w-[5rem] sm:max-w-[16rem] md:max-w-[18rem] text-lg font-extrabold">
               <TextOverflow
                 className="capitalize"
-                text={friend.firstName + " " + friend?.lastName}
+                text={friend.firstName + " " + friend?.lastName ?? ""}
               />
             </div>
             <div className="max-w-[5rem] sm:max-w-[16rem] md:max-w-[18rem] text-sm ">

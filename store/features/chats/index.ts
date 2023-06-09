@@ -16,6 +16,8 @@ interface State {
   loadingGetMessages: boolean;
   chats: ChatType[];
   totalChats?: number;
+  loadingDeleteAllChats: boolean;
+  loadingDeleteChat: boolean;
 }
 
 const initialState: State = {
@@ -26,6 +28,8 @@ const initialState: State = {
   loadingGetMessages: false,
   chats: [],
   totalChats: undefined,
+  loadingDeleteAllChats: false,
+  loadingDeleteChat: false,
 };
 
 export const chatsSlice = createSlice({
@@ -37,6 +41,9 @@ export const chatsSlice = createSlice({
       state.currentChat = payload;
     },
     setChats: (state, { payload }: PayloadAction<ChatType[]>) => {
+      if (state.chats.length == 1) {
+        state.chats = []; //TODO::Check
+      }
       state.chats.push(...payload);
     },
     setTotalChats: (state, { payload }: PayloadAction<number | undefined>) => {
@@ -101,7 +108,9 @@ export const chatsSlice = createSlice({
           state.messages.forEach((element) => {
             element.received = true;
           });
-          state.currentChat.lastMessage.received = true;
+          state.currentChat.lastMessage
+            ? (state.currentChat.lastMessage.received = true)
+            : "";
           if (chat) chat.lastMessage.received = true;
         } else {
           state.currentChat.lastMessage
@@ -114,6 +123,22 @@ export const chatsSlice = createSlice({
         if (payload.lastSeenAt) chat.user.lastSeenAt = payload.lastSeenAt;
       }
     },
+
+    setLoadingDeleteAll(state, { payload }: PayloadAction<boolean>) {
+      state.loadingDeleteAllChats = payload;
+    },
+    deleteAllChat(state, { payload }: PayloadAction<void>) {
+      state.chats = [];
+      state.totalChats = undefined;
+      state.messages = [];
+      state.totalMessages = undefined;
+      state.currentChat = null;
+      state.localCurrentChat = null;
+      state.loadingDeleteAllChats = false;
+    },
+    setLoadingDeleteChat(state, { payload }: PayloadAction<boolean>) {
+      state.loadingDeleteChat = payload;
+    },
     deleteChat(state, { payload }: PayloadAction<string>) {
       const index = state.chats.findIndex((item) => item.id == payload);
       if (index !== -1) {
@@ -125,6 +150,7 @@ export const chatsSlice = createSlice({
         state.messages = [];
         state.totalMessages = undefined;
       }
+      state.loadingDeleteChat = false;
     },
   },
 });
@@ -143,6 +169,9 @@ export const {
   addNewChat,
   changeStatusUser,
   deleteChat,
+  setLoadingDeleteAll,
+  deleteAllChat,
+  setLoadingDeleteChat,
 } = chatsSlice.actions;
 
 export const currentChat = (state: RootState) => state.Chats.currentChat;
@@ -162,3 +191,7 @@ export const loadingGetMessages = (state: RootState) =>
   state.Chats.loadingGetMessages;
 export const localCurrentChat = (state: RootState) =>
   state.Chats.localCurrentChat;
+export const loadingDeleteAllChats = (state: RootState) =>
+  state.Chats.loadingDeleteAllChats;
+export const loadingDeleteChat = (state: RootState) =>
+  state.Chats.loadingDeleteChat;

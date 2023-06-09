@@ -1,22 +1,31 @@
 import CardWronging from "@/components/card-wronging";
 import Dialog, { DialogRef } from "@/components/dialog";
 import ThemeChange from "@/components/theme-change";
-import { chats } from "@/store/features/chats";
-import { useDeleteAllChatsMutation } from "@/store/service/chats";
+import {
+  chats,
+  loadingDeleteAllChats,
+  setLoadingDeleteAll,
+} from "@/store/features/chats";
+import { useSocketIoClient } from "@/utilities/common/hooks/use-socket-io";
 import { useEffect, useRef, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 const General = () => {
-  const [deleteAllChats, { isLoading, isSuccess }] =
-    useDeleteAllChatsMutation();
   const [messageDelete, setMessageDelete] = useState<boolean>(false);
   const refDialog = useRef<DialogRef>(null);
   const allChats = useSelector(chats);
+  const loading = useSelector(loadingDeleteAllChats);
+  const client = useSocketIoClient();
+  const dispatch = useDispatch();
+  const deleteAllChats = () => {
+    dispatch(setLoadingDeleteAll(true));
+    client?.send("deleteAllRooms", undefined);
+  };
   useEffect(() => {
-    if (isSuccess) {
-      setMessageDelete(false);
+    if (!loading && messageDelete) {
+      refDialog.current?.closeDialog();
     }
-  }, [isSuccess]);
+  }, [loading]);
   return (
     <>
       <div className="w-full  flex justify-between items-center px-3">
@@ -41,9 +50,10 @@ const General = () => {
         handler={() => setMessageDelete(!messageDelete)}
       >
         <CardWronging
-          loading={isLoading}
+          loading={loading}
           ok={() => deleteAllChats()}
           cancel={() => refDialog.current?.closeDialog()}
+          text={"All conversations will be deleted for friends as well."}
         />
       </Dialog>
     </>

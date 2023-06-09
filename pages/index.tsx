@@ -5,7 +5,10 @@ import {
   changeStatusUser,
   chats as chatsData,
   currentChat,
+  deleteAllChat,
+  deleteChat,
   localCurrentChat,
+  setLoadingDeleteAll,
 } from "@/store/features/chats";
 import {
   changeStatusFriend,
@@ -14,9 +17,14 @@ import {
 } from "@/store/features/profile";
 import { useAddRoomMutation, useGetChatMutation } from "@/store/service/chats";
 import { AddNewMessage, SendMessageType } from "@/store/types/chats";
-import { ChangeStatusUser, MappingFriendType } from "@/store/types/profile";
+import {
+  ChangeStatusUser,
+  MappingFriendType,
+  User,
+} from "@/store/types/profile";
 import { useSocketIoClient } from "@/utilities/common/hooks/use-socket-io";
 import { GetServerSideProps } from "next";
+import Head from "next/head";
 import Link from "next/link";
 import { ReactElement, useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -63,6 +71,12 @@ const Home: NextPageWithLayout = () => {
   };
 
   useEffect(() => {
+    client?.subscribe("deleteAllChat", () => {
+      dispatch(deleteAllChat());
+    });
+    client?.subscribe("deleteChat", (res: { id: string; user: User }) => {
+      dispatch(deleteChat(res.id));
+    });
     client?.subscribe("message", (res: AddNewMessage) => setNewMessage(res));
     client?.subscribe("mappingFriend", (res: MappingFriendType) => {
       dispatch(deleteLoadingMappingFriendId(res.idFriend));
@@ -88,6 +102,9 @@ const Home: NextPageWithLayout = () => {
   }, [newMessage]);
   return (
     <>
+      <Head>
+        <title>ChatXo</title>
+      </Head>
       <CurrentChat
         currentChat={current}
         localCurrentChat={localCurrent}

@@ -4,7 +4,11 @@ import Script from "next/script";
 export default function Document() {
   return (
     <Html lang="en">
-      <Head></Head>
+      <Head>
+        <meta name="title" content="ChatXo"></meta>
+        <meta name="description" content="ChatXo"></meta>
+        <link rel="icon" href="/svg/logo.svg" type="image/icon type" />
+      </Head>
       <body>
         <Main />
         <NextScript />

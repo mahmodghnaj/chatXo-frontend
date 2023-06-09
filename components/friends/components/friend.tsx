@@ -35,16 +35,16 @@ const Friend = ({ friend }: ComponentProps) => {
   useEffect(() => {
     if (isSuccess) {
       // don't have any chat before
-      if (!currentChat)
-        dispatch(
-          setLocalCurrentChat({
-            id: friend.recipient.id,
-            firstName: friend.recipient.firstName,
-            lastName: friend.recipient?.lastName,
-            status: friend.recipient.status,
-            lastSeenAt: friend.recipient.lastSeenAt,
-          })
-        );
+      dispatch(setCurrentChat(null));
+      dispatch(
+        setLocalCurrentChat({
+          id: friend.recipient.id,
+          firstName: friend.recipient.firstName,
+          lastName: friend.recipient?.lastName,
+          status: friend.recipient.status,
+          lastSeenAt: friend.recipient.lastSeenAt,
+        })
+      );
     }
   }, [isSuccess]);
   return (
@@ -56,7 +56,8 @@ const Friend = ({ friend }: ComponentProps) => {
             <TextOverflow
               className="capitalize"
               text={
-                friend.recipient.firstName + " " + friend.recipient?.lastName
+                friend.recipient.firstName + " " + friend.recipient?.lastName ??
+                ""
               }
             />
           </div>

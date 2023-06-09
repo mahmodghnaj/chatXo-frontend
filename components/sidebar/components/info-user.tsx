@@ -7,13 +7,16 @@ import Settings from "@/components/settings";
 import { useSelector } from "react-redux";
 import { profile } from "@/store/features/profile";
 import { useLogoutMutation } from "@/store/service/auth";
+import { useRouter } from "next/router";
+
 const InfoUser = () => {
   const [showDialog, setShowDialog] = useState<boolean>(false);
   const refDialog = useRef<DialogRef>(null);
   const infoProfile = useSelector(profile);
   const [logout, { isSuccess }] = useLogoutMutation();
+  const router = useRouter();
   if (isSuccess) {
-    window.location.reload(); // Reload the page
+    router.push("/logout"); //run middleware logout
   }
   return (
     <>
@@ -22,8 +25,9 @@ const InfoUser = () => {
           <label tabIndex={0} className="btn w-full">
             <div className="flex w-full  justify-between">
               <div className="overflow-hidden capitalize whitespace-nowrap text-ellipsis">
-                {infoProfile &&
-                  infoProfile.firstName + " " + infoProfile?.lastName}
+                {(infoProfile &&
+                  infoProfile.firstName + " " + infoProfile?.lastName) ??
+                  ""}
               </div>
               <div>
                 <CiMenuKebab className="h-4 w-4" />

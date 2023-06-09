@@ -33,7 +33,7 @@ const Friends = () => {
 
   const filteredFriends = friendsList?.filter((friend) => {
     const fullName =
-      friend.recipient.firstName + " " + friend.recipient?.lastName;
+      friend.recipient.firstName + " " + friend.recipient?.lastName ?? "";
     return fullName.toLowerCase().includes(searchQuery.toLowerCase());
   });
 

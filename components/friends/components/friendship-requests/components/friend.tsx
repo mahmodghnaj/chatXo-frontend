@@ -15,7 +15,8 @@ const Friend = ({ friend, mappingFriend }: ComponentProps) => {
             <TextOverflow
               className="capitalize"
               text={
-                friend.recipient.firstName + " " + friend.recipient?.lastName
+                friend.recipient.firstName + " " + friend.recipient?.lastName ??
+                ""
               }
             />
           </div>

@@ -6,8 +6,9 @@ import {
   currentChat,
   setCurrentChat,
   loadingGetMessages,
+  setLoadingDeleteChat,
+  loadingDeleteChat,
 } from "@/store/features/chats";
-import { useDeleteChatMutation } from "@/store/service/chats";
 import { ChatType } from "@/store/types/chats";
 import { getChatDate } from "@/utilities/common/date";
 import { useRef, useState } from "react";
@@ -16,6 +17,7 @@ import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import SvgIconReceived from "../../../public/svg/received.svg";
 import SvgIconNoReceived from "../../../public/svg/no-received.svg";
+import { useSocketIoClient } from "@/utilities/common/hooks/use-socket-io";
 type ChatProps = {
   chat: ChatType;
 };
@@ -25,8 +27,13 @@ const Chat = ({ chat }: ChatProps) => {
   const current = useSelector(currentChat);
   const loading = useSelector(loadingGetMessages);
   const [messageDelete, setMessageDelete] = useState<boolean>(false);
+  const client = useSocketIoClient();
   const refDialog = useRef<DialogRef>(null);
-  const [deleteChat, { isLoading }] = useDeleteChatMutation();
+  const loadingDelete = useSelector(loadingDeleteChat);
+  const deleteChat = (id: string) => {
+    dispatch(setLoadingDeleteChat(true));
+    client?.send("deleteChat", id);
+  };
 
   const stopPropagation = (event: React.MouseEvent<HTMLDivElement>) => {
     event.stopPropagation();
@@ -45,7 +52,7 @@ const Chat = ({ chat }: ChatProps) => {
             <div className="max-w-[5rem] sm:max-w-[10rem] md:max-w-[12rem] ">
               <TextOverflow
                 className="text-lg capitalize font-extrabold"
-                text={chat.user.firstName + " " + chat.user?.lastName}
+                text={chat.user.firstName + " " + chat.user?.lastName ?? ""}
               />
               <div className="flex items-center">
                 {chat?.lastMessage?.receiver == chat.user.id && (
@@ -99,9 +106,10 @@ const Chat = ({ chat }: ChatProps) => {
         handler={() => setMessageDelete(!messageDelete)}
       >
         <CardWronging
-          loading={isLoading}
+          loading={loadingDelete}
           ok={() => deleteChat(chat.id)}
           cancel={() => refDialog.current?.closeDialog()}
+          text={`Delete For Me and "${chat.user.firstName}"`}
         />
       </Dialog>
     </>
