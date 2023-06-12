@@ -4,7 +4,7 @@ The ChatXo is a Next.js application that allows two users to communicate with ea
 
 ## Demo
 
-Check out the [live demo](https://app-chat-psi.vercel.app/) of the application.
+Check out the [live demo](https://chat-xo.vercel.app/) of the application.
 
 ## Backend Repository
 
